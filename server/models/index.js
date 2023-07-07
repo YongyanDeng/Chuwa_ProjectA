@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-mongoose.set('debug', true);    // additionl information about db
+// showing additionl information about db
+mongoose.set('debug', true);
 require('dotenv').config();
 
 mongoose
@@ -13,3 +14,5 @@ mongoose
       .catch(err => {
             console.log('Error connecting to MongoDB', err);
       });
+
+module.exports = mongoose;
