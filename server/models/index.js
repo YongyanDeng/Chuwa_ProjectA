@@ -16,3 +16,4 @@ mongoose
       });
 
 module.exports = mongoose;
+module.exports.User = require('./user');
