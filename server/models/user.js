@@ -10,7 +10,20 @@ const userSchema = new mongoose.Schema({
       password: {
             type: String,
             required: true
-      }
+      },
+      username: {
+            type: String,
+      },
+      category: {
+            type: String,
+            required: true
+      },
+      cart: [
+            {
+                  type: mongoose.Schema.Types.ObjectId,
+                  ref: 'Product'
+            }
+      ]
 });
 
 const User = mongoose.model('User', userSchema);
