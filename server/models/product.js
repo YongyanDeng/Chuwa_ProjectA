@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
     name: {
@@ -12,7 +12,7 @@ const productSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        default: 'Category1',
+        default: "Category1",
     },
     price: {
         type: Number,
@@ -25,7 +25,7 @@ const productSchema = new mongoose.Schema({
     imageUrl: {
         type: String,
     },
-    createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
+    createdBy: { type: Schema.Types.ObjectId, ref: "User" },
 });
-const Product = mongoose.model('Product', productSchema);
+const Product = mongoose.model("Product", productSchema);
 module.exports = Product;
