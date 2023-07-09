@@ -29,13 +29,21 @@ exports.signin = async function (req, res, next) {
         } else {
             return next({
                 status: 400,
+<<<<<<< HEAD
+                message: 'Invalid Password!',
+=======
                 message: "Invalid Password!",
+>>>>>>> develop
             });
         }
     } catch (err) {
         return next({
             status: 400,
+<<<<<<< HEAD
+            message: 'Email not found!',
+=======
             message: "Email not found!",
+>>>>>>> develop
             // message: err.message
         });
     }
@@ -62,7 +70,11 @@ exports.signup = async function (req, res, next) {
             token,
         });
     } catch (err) {
+<<<<<<< HEAD
+        if (err.code === 11000) err.message = 'Sorry, this email is taken!';
+=======
         if (err.code === 11000) err.message = "Sorry, this email is taken!";
+>>>>>>> develop
         return next({
             status: 400,
             message: err.message,
@@ -83,7 +95,11 @@ exports.resetPassword = async function (req, res, next) {
     } catch (err) {
         return next({
             status: 400,
+<<<<<<< HEAD
+            message: 'Email not found!',
+=======
             message: "Email not found!",
+>>>>>>> develop
             // message: err.message
         });
     }
