@@ -12,11 +12,7 @@ const userSchema = new mongoose.Schema({
                     /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
                 return emailRegex.test(emailInput);
             },
-<<<<<<< HEAD
-            message: 'Invalid Email format',
-=======
             message: "Invalid Email format",
->>>>>>> develop
         },
     },
     password: {
@@ -30,28 +26,16 @@ const userSchema = new mongoose.Schema({
     avatarUrl: {
         type: String,
         default:
-<<<<<<< HEAD
-            'https://source.unsplash.com/collection/{collectionId}/160x160',
-    },
-    category: {
-        type: String,
-        default: 'USER',
-=======
             "https://source.unsplash.com/collection/{collectionId}/160x160",
     },
     category: {
         type: String,
         default: "USER",
->>>>>>> develop
     },
     cart: [
         {
             type: mongoose.Schema.Types.ObjectId,
-<<<<<<< HEAD
-            ref: 'Product',
-=======
             ref: "Product",
->>>>>>> develop
             count: {
                 type: Number,
                 default: 1,
@@ -61,15 +45,9 @@ const userSchema = new mongoose.Schema({
 });
 
 // encrypt password
-<<<<<<< HEAD
-userSchema.pre('save', async function (next) {
-    try {
-        if (!this.isModified('password')) return next();
-=======
 userSchema.pre("save", async function (next) {
     try {
         if (!this.isModified("password")) return next();
->>>>>>> develop
         const hashedPassword = await bcrypt.hash(this.password, 10);
         this.password = hashedPassword;
         return next();
@@ -79,15 +57,9 @@ userSchema.pre("save", async function (next) {
 });
 
 // vendor category
-<<<<<<< HEAD
-userSchema.pre('save', async function (next) {
-    try {
-        if (this.email.includes('@vendor.com')) this.category = 'VENDOR';
-=======
 userSchema.pre("save", async function (next) {
     try {
         if (this.email.includes("@vendor.com")) this.category = "VENDOR";
->>>>>>> develop
         return next();
     } catch (err) {
         return next(err);
@@ -104,9 +76,5 @@ userSchema.methods.comparePassword = async function (candidatePassword, next) {
     }
 };
 
-<<<<<<< HEAD
-const User = mongoose.model('User', userSchema);
-=======
 const User = mongoose.model("User", userSchema);
->>>>>>> develop
 module.exports = User;

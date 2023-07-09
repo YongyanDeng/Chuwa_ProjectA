@@ -9,17 +9,6 @@ mongoose
         useUnifiedTopology: true,
     })
     .then(() => {
-<<<<<<< HEAD
-        console.log('Connected to MongoDB');
-    })
-    .catch((err) => {
-        console.log('Error connecting to MongoDB', err);
-    });
-
-module.exports = mongoose;
-module.exports.User = require('./user');
-module.exports.Product = require('./product');
-=======
         console.log("Connected to MongoDB");
     })
     .catch((err) => {
@@ -28,4 +17,3 @@ module.exports.Product = require('./product');
 
 module.exports = mongoose;
 module.exports.User = require("./user");
->>>>>>> develop
