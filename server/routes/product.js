@@ -1,10 +1,10 @@
 const express = require('express');
 const {
-  getAllProducts,
-  getOneProduct,
-  createProduct,
-  updateProduct,
-  deleteProduct,
+    getAllProducts,
+    getOneProduct,
+    createProduct,
+    updateProduct,
+    deleteProduct,
 } = require('../handlers/product');
 const router = express.Router();
 
