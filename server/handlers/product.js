@@ -29,7 +29,7 @@ const createProduct = async (req, res, next) => {
     try {
         const product = await Product.create(req.body);
         await product.save();
-        return res.status(201).json({ message: "product created" });
+        res.status(201).json({ message: "product created" });
     } catch (err) {
         res.status(500).json({
             error: err.message,
