@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 // showing additionl information about db
-mongoose.set('debug', true);
-require('dotenv').config();
+mongoose.set("debug", true);
+require("dotenv").config();
 
 mongoose
     .connect(process.env.MONGODB_URI, {
@@ -9,6 +9,7 @@ mongoose
         useUnifiedTopology: true,
     })
     .then(() => {
+<<<<<<< HEAD
         console.log('Connected to MongoDB');
     })
     .catch((err) => {
@@ -18,3 +19,13 @@ mongoose
 module.exports = mongoose;
 module.exports.User = require('./user');
 module.exports.Product = require('./product');
+=======
+        console.log("Connected to MongoDB");
+    })
+    .catch((err) => {
+        console.log("Error connecting to MongoDB", err);
+    });
+
+module.exports = mongoose;
+module.exports.User = require("./user");
+>>>>>>> develop
