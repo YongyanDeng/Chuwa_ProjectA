@@ -1,4 +1,5 @@
 const db = require("../models");
+const { acquireCartLock, releaseCartLock } = require("./cartLock");
 
 // Get all products
 const getAllProducts = async (req, res, next) => {
@@ -73,7 +74,6 @@ const updateProduct = async (req, res, next) => {
         if (!product) {
             return res.status(401).json({ error: "Product not found" });
         }
-        await product.save();
         return res.json(product);
     } catch (err) {
         return next({
@@ -137,7 +137,15 @@ const addProductToCart = async (req, res, next) => {
 
         // save user
         await user.save();
-        return res.status(200).json(product);
+
+        const { id, username, category, avatarUrl, cart } = user;
+        return res.status(200).json({
+            id,
+            username,
+            category,
+            avatarUrl,
+            cart,
+        });
     } catch (err) {
         return next(err);
     }
@@ -149,6 +157,7 @@ const getProductByIdInCart = async (req, res, next) => {
         if (!user) {
             return res.status(401).json({ error: "User do not exist" });
         }
+
         if (user.cart.has(req.params.productId)) {
             const product = await db.Product.findById(req.params.productId);
             if (!product || !product.stockNum) {
@@ -156,11 +165,82 @@ const getProductByIdInCart = async (req, res, next) => {
                     .status(401)
                     .json({ error: "No such product in stock" });
             }
+
             return res.status(200).json({
                 product: product.name,
                 quantity: user.cart.get(req.params.productId),
             });
         } else {
+            return res.status(201).json({ error: "No such product in cart" });
+        }
+    } catch (err) {
+        return next(err);
+    }
+};
+
+const updateProductQuantityInCart = async function (req, res, next) {
+    try {
+        const user = await db.User.findById(req.params.id);
+        if (!user) {
+            return res.status(401).json({ error: "User do not exist" });
+        }
+
+        // lock cart for multi fast update
+        const cartLock = await acquireCartLock(req.params.id);
+
+        if (user.cart.has(req.params.productId)) {
+            // const quantity =
+            //     user.cart.get(req.params.productId) + req.body.quantity;
+            const quantity = req.body.quantity;
+            user.cart.set(req.params.productId, quantity);
+
+            // save user
+            await user.save();
+            // release lock
+            await releaseCartLock(req.params.id, cartLock);
+
+            const { id, username, category, avatarUrl, cart } = user;
+            return res.status(200).json({
+                id,
+                username,
+                category,
+                avatarUrl,
+                cart,
+            });
+        } else {
+            await releaseCartLock(req.params.id, cartLock);
+            // release lock
+            return res.status(201).json({ error: "No such product in cart" });
+        }
+    } catch (err) {
+        return next(err);
+    }
+};
+
+const removeProductInCart = async function (req, res, next) {
+    try {
+        const user = await db.User.findById(req.params.id);
+        if (!user) {
+            return res.status(401).json({ error: "User do not exist" });
+        }
+
+        if (user.cart.has(req.params.productId)) {
+            // delete productId in user's cart
+            user.cart.delete(req.params.productId);
+
+            // save user
+            await user.save();
+
+            const { id, username, category, avatarUrl, cart } = user;
+            return res.status(200).json({
+                id,
+                username,
+                category,
+                avatarUrl,
+                cart,
+            });
+        } else {
+            // release lock
             return res.status(201).json({ error: "No such product in cart" });
         }
     } catch (err) {
@@ -177,4 +257,6 @@ module.exports = {
     getAllCartProducts,
     addProductToCart,
     getProductByIdInCart,
+    updateProductQuantityInCart,
+    removeProductInCart,
 };
