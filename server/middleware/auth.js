@@ -8,7 +8,7 @@ exports.loginVerify = async function (req, res, next) {
         else
             return next({
                 status: 401,
-                message: "Please sign in!",
+                message: "Please sign in first!",
             });
     } catch (err) {
         return next(err);
@@ -38,7 +38,7 @@ exports.vendorVerify = async function (req, res, next) {
         else
             return next({
                 status: 401,
-                message: "Unauthorized",
+                message: "You are not VENDOR! Unauthorized",
             });
     } catch (err) {
         return next(err);

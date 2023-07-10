@@ -32,14 +32,23 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "USER",
     },
-    cart: [
+    cart: {
+        type: Map,
+        of: Number,
+        default: new Map(),
+        validate: {
+            validator: function (value) {
+                for (const key of value.keys()) {
+                    if (!mongoose.Types.ObjectId.isValid(key)) return false;
+                }
+                return true;
+            },
+        },
+    },
+    stock: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Product",
-            count: {
-                type: Number,
-                default: 1,
-            },
         },
     ],
 });
