@@ -1,13 +1,15 @@
-const Product = require("../models/product");
+const db = require("../models");
+const { acquireCartLock, releaseCartLock } = require("./cartLock");
 
 // Get all products
 const getAllProducts = async (req, res, next) => {
     try {
-        const products = await Product.find();
-        res.status(200).json(products);
+        const products = await db.Product.find();
+        return res.status(200).json(products);
     } catch (err) {
-        res.status(500).json({
-            error: err.message,
+        return next({
+            status: 500,
+            message: err.message,
         });
     }
 };
@@ -15,24 +17,46 @@ const getAllProducts = async (req, res, next) => {
 // Get an product by id
 const getOneProduct = async (req, res, next) => {
     try {
-        const product = await Product.findById(req.params?.id);
-        res.status(200).json(product);
+        const product = await db.Product.findById(req.params?.productId);
+        return res.status(200).json(product);
     } catch (err) {
-        res.status(500).json({
-            error: err.message,
+        return next({
+            status: 500,
+            message: err.message,
         });
     }
 };
 
-// Create an new product
+// Create an new product - only vendor
 const createProduct = async (req, res, next) => {
     try {
-        const product = await Product.create(req.body);
-        await product.save();
-        res.status(201).json({ message: "product created" });
+        const product = await db.Product.create({
+            ...req.body,
+            createdBy: req.params.id,
+        });
+        // Find the vendor and save product into vendor's stock
+        const vendor = await db.User.findById(req.params.id);
+        if (!vendor) {
+            return res.status(401).json({ error: "Vendor do not exist" });
+        }
+        vendor.stock.push(product.id);
+        // save vendor
+        await vendor.save();
+        const newProduct = await db.Product.findById(product.id).populate(
+            "createdBy",
+            {
+                username: true,
+                avatarUrl: true,
+                category: true,
+            }
+        );
+        return res.status(200).json({ newProduct });
     } catch (err) {
-        res.status(500).json({
-            error: err.message,
+        if (err.code === 11000)
+            err.message = "Sorry, this product'name is taken!";
+        return next({
+            status: 400,
+            message: err.message,
         });
     }
 };
@@ -40,21 +64,21 @@ const createProduct = async (req, res, next) => {
 // Update an product by id
 const updateProduct = async (req, res, next) => {
     try {
-        const product = await Product.findByIdAndUpdate(
-            req.params?.id,
+        const product = await db.Product.findByIdAndUpdate(
+            req.params?.productId,
             req.body,
             {
                 new: true,
             }
         );
         if (!product) {
-            return res.status(404).json({ error: "product not found" });
+            return res.status(401).json({ error: "Product not found" });
         }
-        await product.save();
-        res.json(product);
+        return res.json(product);
     } catch (err) {
-        res.status(500).json({
-            error: err.message,
+        return next({
+            status: 500,
+            message: err.message,
         });
     }
 };
@@ -62,12 +86,165 @@ const updateProduct = async (req, res, next) => {
 // Delete an product by id
 const deleteProduct = async (req, res, next) => {
     try {
-        await Product.findByIdAndDelete(req.params?.id);
-        res.status(204).json({ message: "product deleted" });
+        const deletedProduct = await db.Product.findById(req.params?.productId);
+        await deletedProduct.deleteOne();
+        return res.status(204).json(deletedProduct);
     } catch (err) {
-        res.status(500).json({
-            error: err.message,
+        return next({
+            status: 500,
+            message: err.message,
         });
+    }
+};
+
+const getAllCartProducts = async (req, res, next) => {
+    try {
+        const user = await db.User.findById(req.params.id);
+        if (!user) {
+            return res.status(401).json({ error: "User do not exist" });
+        }
+        const cart = user.cart;
+        return res.status(200).json(cart);
+    } catch (err) {
+        return next(err);
+    }
+};
+
+const addProductToCart = async (req, res, next) => {
+    try {
+        // find the user
+        const user = await db.User.findById(req.params.id);
+        if (!user) {
+            return res.status(401).json({ error: "User do not exist" });
+        }
+
+        // find the product
+        const quantity = req.body.quantity;
+        const product = await db.Product.findById(req.body.productId);
+        if (!product || !product.stockNum) {
+            return res.status(401).json({ error: "Product not found" });
+        } else if (product.stockNum < quantity) {
+            return res
+                .status(401)
+                .json({ error: "Insufficient stock of this product" });
+        }
+
+        // add product into cart
+        if (user.cart.has(product.id)) {
+            const currQuantity = user.cart.get(product.id);
+            user.cart.set(product.id, currQuantity + quantity);
+        } else user.cart.set(product.id, quantity);
+
+        // save user
+        await user.save();
+
+        const { id, username, category, avatarUrl, cart } = user;
+        return res.status(200).json({
+            id,
+            username,
+            category,
+            avatarUrl,
+            cart,
+        });
+    } catch (err) {
+        return next(err);
+    }
+};
+
+const getProductByIdInCart = async (req, res, next) => {
+    try {
+        const user = await db.User.findById(req.params.id);
+        if (!user) {
+            return res.status(401).json({ error: "User do not exist" });
+        }
+
+        if (user.cart.has(req.params.productId)) {
+            const product = await db.Product.findById(req.params.productId);
+            if (!product || !product.stockNum) {
+                return res
+                    .status(401)
+                    .json({ error: "No such product in stock" });
+            }
+
+            return res.status(200).json({
+                product: product.name,
+                quantity: user.cart.get(req.params.productId),
+            });
+        } else {
+            return res.status(201).json({ error: "No such product in cart" });
+        }
+    } catch (err) {
+        return next(err);
+    }
+};
+
+const updateProductQuantityInCart = async function (req, res, next) {
+    try {
+        const user = await db.User.findById(req.params.id);
+        if (!user) {
+            return res.status(401).json({ error: "User do not exist" });
+        }
+
+        // lock cart for multi fast update
+        const cartLock = await acquireCartLock(req.params.id);
+
+        if (user.cart.has(req.params.productId)) {
+            // const quantity =
+            //     user.cart.get(req.params.productId) + req.body.quantity;
+            const quantity = req.body.quantity;
+            user.cart.set(req.params.productId, quantity);
+
+            // save user
+            await user.save();
+            // release lock
+            await releaseCartLock(req.params.id, cartLock);
+
+            const { id, username, category, avatarUrl, cart } = user;
+            return res.status(200).json({
+                id,
+                username,
+                category,
+                avatarUrl,
+                cart,
+            });
+        } else {
+            await releaseCartLock(req.params.id, cartLock);
+            // release lock
+            return res.status(201).json({ error: "No such product in cart" });
+        }
+    } catch (err) {
+        return next(err);
+    }
+};
+
+const removeProductInCart = async function (req, res, next) {
+    try {
+        const user = await db.User.findById(req.params.id);
+        if (!user) {
+            return res.status(401).json({ error: "User do not exist" });
+        }
+
+        if (user.cart.has(req.params.productId)) {
+            // delete productId in user's cart
+            user.cart.delete(req.params.productId);
+
+            // save user
+            await user.save();
+
+            const { id, username, category, avatarUrl, cart } = user;
+            return res.status(200).json({
+                id,
+                username,
+                category,
+                avatarUrl,
+                cart,
+            });
+        } else {
+            // release lock
+            return res.status(201).json({ error: "No such product in cart" });
+        }
+    } catch (err) {
+        return next(err);
     }
 };
 
@@ -77,4 +254,9 @@ module.exports = {
     createProduct,
     updateProduct,
     deleteProduct,
+    getAllCartProducts,
+    addProductToCart,
+    getProductByIdInCart,
+    updateProductQuantityInCart,
+    removeProductInCart,
 };

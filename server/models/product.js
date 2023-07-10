@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const User = require("./user");
 
 const productSchema = new mongoose.Schema({
     name: {
@@ -8,7 +9,7 @@ const productSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: true,
+        default: "None",
     },
     category: {
         type: String,
@@ -24,8 +25,27 @@ const productSchema = new mongoose.Schema({
     },
     imageUrl: {
         type: String,
+        default:
+            "https://m.media-amazon.com/images/I/61RNOxTPxuL._AC_SY450_.jpg",
     },
-    createdBy: { type: Schema.Types.ObjectId, ref: "User" },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    },
 });
+
+productSchema.pre("deleteOne", { document: true }, async function (next) {
+    try {
+        // find the vendor
+        const vendor = await User.findById(this.createdBy);
+        // remove the id of this product from vendor's stock
+        vendor.stock.remove(this.id);
+        await vendor.save();
+        return next();
+    } catch (err) {
+        return next(err);
+    }
+});
+
 const Product = mongoose.model("Product", productSchema);
 module.exports = Product;
