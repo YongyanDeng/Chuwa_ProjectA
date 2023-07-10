@@ -10,6 +10,7 @@ const {
     getProductByIdInCart,
     updateProductQuantityInCart,
     removeProductInCart,
+    checkout,
 } = require("../handlers/product");
 const router = express.Router({ mergeParams: true });
 const { loginVerify, userVerify, vendorVerify } = require("../middleware/auth");
@@ -28,5 +29,7 @@ router.post("/cart", addProductToCart);
 router.get("/cart/:productId", getProductByIdInCart);
 router.put("/cart/:productId", updateProductQuantityInCart);
 router.delete("/cart/:productId", removeProductInCart);
+
+router.post("/cart/checkout", checkout);
 
 module.exports = router;

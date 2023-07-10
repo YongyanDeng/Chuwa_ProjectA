@@ -1,7 +1,10 @@
 const db = require("../models");
 const { acquireCartLock, releaseCartLock } = require("./cartLock");
 
-// Get all products
+/**
+ * Get all products in stock
+ * @return {Product[]} All_Product_In_Stock
+ */
 const getAllProducts = async (req, res, next) => {
     try {
         const products = await db.Product.find();
@@ -14,7 +17,10 @@ const getAllProducts = async (req, res, next) => {
     }
 };
 
-// Get an product by id
+/**
+ * Get an product selected by id
+ * @return {Product} Selected_Product_info
+ */
 const getOneProduct = async (req, res, next) => {
     try {
         const product = await db.Product.findById(req.params?.productId);
@@ -27,13 +33,17 @@ const getOneProduct = async (req, res, next) => {
     }
 };
 
-// Create an new product - only vendor
+/**
+ * Create an new product - vendor only
+ * @return {Product} New_Product_info
+ */
 const createProduct = async (req, res, next) => {
     try {
         const product = await db.Product.create({
             ...req.body,
             createdBy: req.params.id,
         });
+
         // Find the vendor and save product into vendor's stock
         const vendor = await db.User.findById(req.params.id);
         if (!vendor) {
@@ -42,18 +52,15 @@ const createProduct = async (req, res, next) => {
         vendor.stock.push(product.id);
         // save vendor
         await vendor.save();
-        const newProduct = await db.Product.findById(product.id).populate(
-            "createdBy",
-            {
-                username: true,
-                avatarUrl: true,
-                category: true,
-            }
-        );
+
+        const newProduct = await db.Product.findById(product.id).populate("createdBy", {
+            username: true,
+            avatarUrl: true,
+            category: true,
+        });
         return res.status(200).json({ newProduct });
     } catch (err) {
-        if (err.code === 11000)
-            err.message = "Sorry, this product'name is taken!";
+        if (err.code === 11000) err.message = "Sorry, this product'name is taken!";
         return next({
             status: 400,
             message: err.message,
@@ -61,21 +68,27 @@ const createProduct = async (req, res, next) => {
     }
 };
 
-// Update an product by id
+/**
+ * Update an product selected by id - vendor & creator only
+ * @return {Product} Updated_Product_info
+ */
 const updateProduct = async (req, res, next) => {
     try {
-        const product = await db.Product.findByIdAndUpdate(
-            req.params?.productId,
-            req.body,
-            {
-                new: true,
-            }
-        );
+        const product = await db.Product.findByIdAndUpdate(req.params?.productId, req.body, {
+            new: true,
+        });
         if (!product) {
             return res.status(401).json({ error: "Product not found" });
         }
+
+        // verify if this product belongs to vendor's stock
+        if (product.createdBy.toString() !== req.params.id) {
+            return res.status(401).json({ error: "Unauthorized to modify this product" });
+        }
+
         return res.json(product);
     } catch (err) {
+        if (err.code === 11000) err.message = "Sorry, this product'name is taken!";
         return next({
             status: 500,
             message: err.message,
@@ -83,10 +96,22 @@ const updateProduct = async (req, res, next) => {
     }
 };
 
-// Delete an product by id
+/**
+ * Delete an product selected by id - vendor & creator only
+ * @return {Product} Deleted_Product_info
+ */
 const deleteProduct = async (req, res, next) => {
     try {
         const deletedProduct = await db.Product.findById(req.params?.productId);
+        if (!deletedProduct) {
+            return res.status(401).json({ error: "Product not found" });
+        }
+
+        // verify if this product belongs to vendor's stock
+        if (deletedProduct.createdBy.toString() !== req.params.id) {
+            return res.status(401).json({ error: "Unauthorized to modify this product" });
+        }
+
         await deletedProduct.deleteOne();
         return res.status(204).json(deletedProduct);
     } catch (err) {
@@ -97,19 +122,10 @@ const deleteProduct = async (req, res, next) => {
     }
 };
 
-const getAllCartProducts = async (req, res, next) => {
-    try {
-        const user = await db.User.findById(req.params.id);
-        if (!user) {
-            return res.status(401).json({ error: "User do not exist" });
-        }
-        const cart = user.cart;
-        return res.status(200).json(cart);
-    } catch (err) {
-        return next(err);
-    }
-};
-
+/**
+ * Add a products selected by productId into user's cart
+ * @return {id, username, category, avatarUrl, cart} User_info
+ */
 const addProductToCart = async (req, res, next) => {
     try {
         // find the user
@@ -121,19 +137,25 @@ const addProductToCart = async (req, res, next) => {
         // find the product
         const quantity = req.body.quantity;
         const product = await db.Product.findById(req.body.productId);
+        // Check if purchase quantity <= stock quantity
         if (!product || !product.stockNum) {
             return res.status(401).json({ error: "Product not found" });
         } else if (product.stockNum < quantity) {
-            return res
-                .status(401)
-                .json({ error: "Insufficient stock of this product" });
+            return res.status(401).json({ error: "Insufficient stock of this product" });
         }
 
         // add product into cart
         if (user.cart.has(product.id)) {
             const currQuantity = user.cart.get(product.id);
+            if (product.stockNum < currQuantity + quantity) {
+                return res.status(401).json({
+                    error: "Insufficient stock of this product",
+                });
+            }
             user.cart.set(product.id, currQuantity + quantity);
-        } else user.cart.set(product.id, quantity);
+        } else {
+            user.cart.set(product.id, quantity);
+        }
 
         // save user
         await user.save();
@@ -151,6 +173,44 @@ const addProductToCart = async (req, res, next) => {
     }
 };
 
+/**
+ * Get all products selected by productId in user's cart
+ * @return {Product[]} User_cart
+ */
+const getAllCartProducts = async (req, res, next) => {
+    try {
+        const user = await db.User.findById(req.params.id);
+        if (!user) {
+            return res.status(401).json({ error: "User do not exist" });
+        }
+        const cart = [];
+        for (const [key, value] of user.cart) {
+            const product = await db.Product.findById(key).populate("createdBy");
+            const { id, name, description, price, imageUrl, createdBy } = product;
+            cart.push({
+                id: id,
+                name: name,
+                description: description,
+                price: price,
+                quantity: value,
+                imageUrl: imageUrl,
+                vendor: {
+                    id: createdBy.id,
+                    username: createdBy.username,
+                    avatarUrl: createdBy.avatarUrl,
+                },
+            });
+        }
+        return res.status(200).json(cart);
+    } catch (err) {
+        return next(err);
+    }
+};
+
+/**
+ * Get a product selected by productId in user's cart
+ * @return {id, name, description, price, quantity, imageUrl, vendor} Product_info
+ */
 const getProductByIdInCart = async (req, res, next) => {
     try {
         const user = await db.User.findById(req.params.id);
@@ -159,16 +219,23 @@ const getProductByIdInCart = async (req, res, next) => {
         }
 
         if (user.cart.has(req.params.productId)) {
-            const product = await db.Product.findById(req.params.productId);
+            const product = await db.Product.findById(req.params.productId).populate("createdBy");
             if (!product || !product.stockNum) {
-                return res
-                    .status(401)
-                    .json({ error: "No such product in stock" });
+                return res.status(401).json({ error: "No such product in stock" });
             }
-
+            const { id, name, description, price, imageUrl, createdBy } = product;
             return res.status(200).json({
-                product: product.name,
+                id: id,
+                name: name,
+                description: description,
+                price: price,
                 quantity: user.cart.get(req.params.productId),
+                imageUrl: imageUrl,
+                vendor: {
+                    id: createdBy.id,
+                    username: createdBy.username,
+                    avatarUrl: createdBy.avatarUrl,
+                },
             });
         } else {
             return res.status(201).json({ error: "No such product in cart" });
@@ -178,6 +245,10 @@ const getProductByIdInCart = async (req, res, next) => {
     }
 };
 
+/**
+ * Update quantity of a product selected by productId in user's cart
+ * @return {id, username, category, avatarUrl, cart} User_info
+ */
 const updateProductQuantityInCart = async function (req, res, next) {
     try {
         const user = await db.User.findById(req.params.id);
@@ -217,6 +288,10 @@ const updateProductQuantityInCart = async function (req, res, next) {
     }
 };
 
+/**
+ * Remove a product selected by productId in user's cart
+ * @return {id, username, category, avatarUrl, cart} User_info
+ */
 const removeProductInCart = async function (req, res, next) {
     try {
         const user = await db.User.findById(req.params.id);
@@ -248,6 +323,55 @@ const removeProductInCart = async function (req, res, next) {
     }
 };
 
+/**
+ * Calculate total price of chosenProducts in req.body
+ * Check and minus chosenProduct's quantity from product's stockNum
+ * @return {Product[]} checkoutProducts
+ * @return {number} totalPrice
+ */
+const checkout = async function (req, res, next) {
+    try {
+        // find user
+        const user = await db.User.findById(req.params.id);
+
+        // calculate total price and update stock
+        const checkoutProducts = [];
+        var totalPrice = 0;
+        for (const product of req.body.chosenProducts) {
+            const quantity = product.quantity;
+            const price = product.price;
+
+            // Find this product in Stock
+            const productInStock = await db.Product.findById(product.id);
+            if (!productInStock || !productInStock.stockNum) {
+                return res.status(401).json({
+                    error: `No such product in Stock`,
+                });
+            }
+
+            // Update stock and calculate total price
+            if (productInStock.stockNum >= quantity) {
+                productInStock.stockNum -= quantity;
+                totalPrice += quantity * price;
+                user.cart.delete(product.id);
+            } else {
+                return res.status(401).json({
+                    error: `Insufficient stock of ${product.name}`,
+                });
+            }
+            await productInStock.save();
+            checkoutProducts.push(product);
+        }
+        await user.save();
+        return res.status(200).json({
+            checkoutProducts,
+            "total price: ": totalPrice,
+        });
+    } catch (err) {
+        return next(err);
+    }
+};
+
 module.exports = {
     getAllProducts,
     getOneProduct,
@@ -259,4 +383,5 @@ module.exports = {
     getProductByIdInCart,
     updateProductQuantityInCart,
     removeProductInCart,
+    checkout,
 };
