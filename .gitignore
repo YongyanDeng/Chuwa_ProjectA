@@ -9,5 +9,6 @@ books/
 .idea/
 .env
 .prettierrc
+.vscode
 
 marp-diagrams/
