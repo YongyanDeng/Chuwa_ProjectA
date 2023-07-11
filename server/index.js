@@ -23,22 +23,6 @@ app.use((req, res, next) => {
     next(err);
 });
 
-app.get(
-    "/api/products",
-    loginVerify,
-    vendorVerify,
-    async function (req, res, next) {
-        try {
-            const products = await db.Product.find().sort({
-                createdAt: "desc",
-            });
-            return res.status(200).json(products);
-        } catch (err) {
-            return next(err);
-        }
-    }
-);
-
 app.use(errorHandler);
 
 app.listen(PORT, () => {
