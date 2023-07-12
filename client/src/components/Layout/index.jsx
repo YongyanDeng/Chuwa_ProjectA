@@ -1,7 +1,8 @@
 import React, { useMemo } from "react";
 import { Layout } from "antd";
-// import { Outlet } from "react-router-dom";
-// import Navbar from "components/Navbar";
+import { Outlet } from "react-router-dom";
+import Navbar from "components/Navbar";
+import Footbar from "components/Footbar";
 // import ErrorToast from "components/ErrorToast";
 import { useMediaQuery } from "hooks/useMediaQuery";
 
@@ -13,19 +14,21 @@ export default function MainLayout() {
     const headerStyle = useMemo(
         () => ({
             display: "flex",
+            // justifyContent: "space-between",
+            // alignItems: "center",
             width: "100%",
             height: "48px",
-            color: "#FFFFFF",
             backgroundColor: "#111827",
-            padding: "8 64px",
-            justifyContent: "space-between",
-            alignItems: "center",
+            padding: "8px 64px",
         }),
         []
     );
 
     const footerStyle = useMemo(
         () => ({
+            display: "flex",
+            // justifyContent: "space-between",
+            // alignItems: "center",
             width: "100%",
             height: "85px",
             color: "#FFFFFF",
@@ -46,9 +49,13 @@ export default function MainLayout() {
 
     return (
         <Layout>
-            <Header style={headerStyle}>Header</Header>
+            <Header style={headerStyle}>
+                <Navbar />
+            </Header>
             <Content style={contentStyle}>Content</Content>
-            <Footer style={footerStyle}>Footer</Footer>
+            <Footer style={footerStyle}>
+                <Footbar />
+            </Footer>
         </Layout>
     );
 }
