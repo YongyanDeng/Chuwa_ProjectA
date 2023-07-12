@@ -40,9 +40,13 @@ export default function MainLayout() {
 
     const contentStyle = useMemo(
         () => ({
+            display: "flex",
             height: "calc(100vh - 48px - 85px)",
             padding: "0 50px",
-            width: isMobile ? "100%" : "375px",
+            width: !isMobile ? "100%" : "375px",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#F9FAFB",
         }),
         [isMobile]
     );
@@ -52,7 +56,9 @@ export default function MainLayout() {
             <Header style={headerStyle}>
                 <Navbar />
             </Header>
-            <Content style={contentStyle}>Content</Content>
+            <Content style={contentStyle}>
+                <Outlet />
+            </Content>
             <Footer style={footerStyle}>
                 <Footbar />
             </Footer>

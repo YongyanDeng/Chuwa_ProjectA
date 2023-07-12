@@ -1,9 +1,10 @@
 import "./styles.css";
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
-import { Space, Input, Typography } from "antd";
-import { useSelector } from "react-redux";
+import { ShoppingCartOutlined, UserOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { Space, Input, Typography, Drawer } from "antd";
+// import { useSelector } from "react-redux";
+import Cart from "./cart";
 
 const { Search } = Input;
 const { Title, Paragraph } = Typography;
@@ -12,11 +13,15 @@ const companyName = "Chuwa";
 
 export default function Navbar() {
     // const { isAuthenticated } = useSelector((state) => state.user);
-    const [cartDrop, setCartDrop] = useState(false);
+    const [open, setOpen] = useState(false);
     const { pathname: location } = useLocation();
 
+    const onClose = () => {
+        setOpen(!open);
+    };
+
     useEffect(() => {
-        setCartDrop(false);
+        setOpen(false);
     }, [location]);
 
     const handleSearch = (value) => console.log(value);
@@ -52,7 +57,7 @@ export default function Navbar() {
                 </div>
                 <div className="cart">
                     <button
-                        onClick={handleIconClick}
+                        onClick={onClose}
                         style={{ background: "none", border: "none", cursor: "pointer" }}
                     >
                         <ShoppingCartOutlined style={{ color: "#fff", fontSize: "20px" }} />
@@ -60,6 +65,17 @@ export default function Navbar() {
                     <p style={{ color: "#FFF", fontFamily: "Inter", fontSize: "15px" }}>$0.00</p>
                 </div>
             </div>
+            <Drawer
+                title={`Cart - ()`}
+                placement="right"
+                closable={true}
+                open={open}
+                onClose={onClose}
+                style={{ zIndex: 99 }}
+                closeIcon={<CloseCircleOutlined />}
+            >
+                <Cart />
+            </Drawer>
         </nav>
     );
 }
