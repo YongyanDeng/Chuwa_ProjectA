@@ -4,7 +4,6 @@ import style from "./style.module.css";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
 import { Button, Form, Input, Typography } from "antd";
 import FormItem from "antd/es/form/FormItem";
 
@@ -18,11 +17,13 @@ import FormItem from "antd/es/form/FormItem";
  */
 export default function AuthForm({ buttonText, onSubmit, title, fields, errors }) {
     const { status } = useSelector((state) => state.user);
+
     return (
         <div className={style.FormBox}>
             <Typography.Title level={2} className={style.title}>
                 {title}
             </Typography.Title>
+            {errors ? <Typography className={style.error}>{errors}</Typography> : null}
             <Form onFinish={onSubmit} autoComplete="off">
                 {fields.map((field) => (
                     <FormItem
@@ -52,9 +53,20 @@ export default function AuthForm({ buttonText, onSubmit, title, fields, errors }
                     </Button>
                 </Form.Item>
             </Form>
-            <Typography>
-                Already have an account? <Link>Sign in</Link>
-            </Typography>
+            {buttonText.includes("Create account") ? (
+                <div className="buttomText">
+                    <Typography>
+                        Already have an account? <Link to={"/signin"}>Sign in</Link>
+                    </Typography>
+                </div>
+            ) : (
+                <div className="buttomText">
+                    <Typography>
+                        Don't have an account? <Link to={"/signup"}>Sign up</Link>
+                    </Typography>
+                    <Link className="right-link">Forget password?</Link>
+                </div>
+            )}
         </div>
     );
 }

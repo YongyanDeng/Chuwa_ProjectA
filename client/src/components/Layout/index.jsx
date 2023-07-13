@@ -15,13 +15,15 @@ export default function MainLayout() {
         () => ({
             display: "flex",
             // justifyContent: "space-between",
-            // alignItems: "center",
-            width: "100%",
-            height: "48px",
+            alignItems: !isMobile ? null : "flex-start",
+            // width: "100%",
+            width: !isMobile ? "100%" : "375px",
+            height: !isMobile ? "48px" : "auto",
             backgroundColor: "#111827",
             padding: "8px 64px",
+            flexDirection: !isMobile ? "row" : "column",
         }),
-        []
+        [isMobile]
     );
 
     const footerStyle = useMemo(
@@ -29,19 +31,20 @@ export default function MainLayout() {
             display: "flex",
             // justifyContent: "space-between",
             // alignItems: "center",
-            width: "100%",
-            height: "85px",
+            // width: "100%",
+            width: !isMobile ? "100%" : "375px",
+            height: !isMobile ? "85px" : "auto",
             color: "#FFFFFF",
             backgroundColor: "#111827",
-            flexShrink: "0",
+            flexDirection: !isMobile ? "row" : "column",
         }),
-        []
+        [isMobile]
     );
 
     const contentStyle = useMemo(
         () => ({
             display: "flex",
-            height: "calc(100vh - 48px - 85px)",
+            height: !isMobile ? "calc(100vh - 48px - 85px)" : "auto",
             padding: "0 50px",
             width: !isMobile ? "100%" : "375px",
             justifyContent: "center",
