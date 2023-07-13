@@ -8,8 +8,7 @@ const userSchema = new mongoose.Schema({
         unique: true,
         validate: {
             validator: function (emailInput) {
-                const emailRegex =
-                    /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+                const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
                 return emailRegex.test(emailInput);
             },
             message: "Invalid Email format",
@@ -21,12 +20,11 @@ const userSchema = new mongoose.Schema({
     },
     username: {
         type: String,
-        required: true,
+        default: "USER",
     },
     avatarUrl: {
         type: String,
-        default:
-            "https://source.unsplash.com/collection/{collectionId}/160x160",
+        default: "https://source.unsplash.com/collection/{collectionId}/160x160",
     },
     category: {
         type: String,
@@ -68,7 +66,10 @@ userSchema.pre("save", async function (next) {
 // vendor category
 userSchema.pre("save", async function (next) {
     try {
-        if (this.email.includes("@vendor.com")) this.category = "VENDOR";
+        if (this.email.includes("@vendor.com")) {
+            this.category = "VENDOR";
+            this.username = "VENDOR";
+        }
         return next();
     } catch (err) {
         return next(err);

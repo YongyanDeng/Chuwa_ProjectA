@@ -1,0 +1,9 @@
+.ant-form-item-explain {
+    text-align: right;
+}
+
+.buttomText {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
