@@ -1,9 +1,13 @@
-import { configureStore } from "@reduxjs/toolkit";
-
-import productReducer from "./productSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import userReducer from './userSlice';
+import errorReducer from './errorSlice';
+import productReducer from './productSlice';
 
 export default configureStore({
-  reducer: {
-    product: productReducer,
-  },
+    reducer: {
+        user: userReducer,
+        error: errorReducer,
+        product: productReducer,
+    },
+    devTools: true,
 });
