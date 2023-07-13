@@ -31,3 +31,11 @@
     cursor: pointer;
     align-items: baseline;
 }
+
+.ant-drawer-header {
+    background-color: #5048e5;
+}
+.ant-drawer-title {
+    display: flex;
+    align-items: baseline;
+}

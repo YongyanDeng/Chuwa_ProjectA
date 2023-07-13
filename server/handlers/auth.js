@@ -75,6 +75,12 @@ exports.resetPassword = async function (req, res, next) {
         const user = await db.User.findOne({
             email: req.body.email,
         });
+        if (!user) {
+            return next({
+                status: 400,
+                message: "Email not found!",
+            });
+        }
         user.password = req.body.password;
         await user.save();
         res.status(202).json({

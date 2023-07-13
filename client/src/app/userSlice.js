@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { signup, signin } from "services/auth";
+import { signup, signin, updatePassword as up } from "services/auth";
 import { getAllCartProducts } from "services/user";
 import { addError, removeError } from "./errorSlice";
 
@@ -33,6 +33,20 @@ export const signInUser = createAsyncThunk("currentUser/signInUser", async (data
         return thunkAPI.rejectWithValue(err.message);
     }
 });
+
+export const updatePassword = createAsyncThunk(
+    "currentUser/updatePassword",
+    async (data, thunkAPI) => {
+        try {
+            const user = await up(data);
+            thunkAPI.dispatch(removeError());
+            return user;
+        } catch (err) {
+            thunkAPI.dispatch(addError(err.message));
+            return thunkAPI.rejectWithValue(err.message);
+        }
+    }
+);
 
 export const getCart = createAsyncThunk("currentUser/getCart", async (data, thunkAPI) => {
     try {
@@ -78,6 +92,7 @@ const currentUserSlice = createSlice({
         builder.addCase(signInUser.pending, (state, action) => {
             state.status = "pending";
         });
+
         // Sign up
         builder.addCase(signUpUser.fulfilled, (state, action) => {
             state.status = "successed";
@@ -88,6 +103,18 @@ const currentUserSlice = createSlice({
         builder.addCase(signUpUser.pending, (state, action) => {
             state.status = "pending";
         });
+
+        // Update Password
+        builder.addCase(updatePassword.fulfilled, (state, action) => {
+            state.status = "successed";
+        });
+        builder.addCase(updatePassword.rejected, (state, action) => {
+            state.status = "failed";
+        });
+        builder.addCase(updatePassword.pending, (state, action) => {
+            state.status = "pending";
+        });
+
         // Get cart;
         builder.addCase(getCart.fulfilled, (state, action) => {
             const cart = action.payload;

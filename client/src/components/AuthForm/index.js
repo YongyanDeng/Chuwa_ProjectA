@@ -15,7 +15,7 @@ import FormItem from "antd/es/form/FormItem";
  * @param {Object} fields
  * @param {Object} errors
  */
-export default function AuthForm({ buttonText, onSubmit, title, fields, errors }) {
+export default function AuthForm({ buttonText, onSubmit, title, fields, errors, buttomText }) {
     const { status } = useSelector((state) => state.user);
 
     return (
@@ -53,20 +53,7 @@ export default function AuthForm({ buttonText, onSubmit, title, fields, errors }
                     </Button>
                 </Form.Item>
             </Form>
-            {buttonText.includes("Create account") ? (
-                <div className="buttomText">
-                    <Typography>
-                        Already have an account? <Link to={"/signin"}>Sign in</Link>
-                    </Typography>
-                </div>
-            ) : (
-                <div className="buttomText">
-                    <Typography>
-                        Don't have an account? <Link to={"/signup"}>Sign up</Link>
-                    </Typography>
-                    <Link className="right-link">Forget password?</Link>
-                </div>
-            )}
+            <div className="buttomText">{buttomText}</div>
         </div>
     );
 }
