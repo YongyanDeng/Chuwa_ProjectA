@@ -8,7 +8,7 @@ import {
 import { removeError, addError } from './errorSlice';
 
 const initialState = {
-    prodcuts: [],
+    products: [],
     status: 'idle',
 };
 
@@ -111,12 +111,13 @@ const productSlice = createSlice({
         });
         builder.addCase(updateProductAction.fulfilled, (state, action) => {
             state.status = 'succeeded';
-            const productIndex =state.prodcuts.findIndex((product)=> product.id===action.playload.id);
-            if (productIndex!=-1){
-                state.status='succeeded'
-                state.products[productIndex]=action.payload
-            }
+            const productIndex = state.prodcuts.findIndex(
+                (product) => product.id === action.playload.id
             );
+            if (productIndex != -1) {
+                state.status = 'succeeded';
+                state.products[productIndex] = action.payload;
+            }
         });
         builder.addCase(updateProductAction.rejected, (state, action) => {
             state.status = 'failed';
