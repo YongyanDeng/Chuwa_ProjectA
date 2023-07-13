@@ -1,12 +1,12 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Layout from "./components/Layout";
-import Signin from "./pages/Signin";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Layout from './components/Layout';
+import Signin from './pages/Signin';
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Layout />} />
+                <Route path='/' element={<Layout />} />
             </Routes>
         </BrowserRouter>
     );
