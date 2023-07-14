@@ -114,7 +114,7 @@ const productSlice = createSlice({
             const productIndex = state.prodcuts.findIndex(
                 (product) => product.id === action.playload.id
             );
-            if (productIndex != -1) {
+            if (productIndex !== -1) {
                 state.status = 'succeeded';
                 state.products[productIndex] = action.payload;
             }
@@ -127,3 +127,4 @@ const productSlice = createSlice({
         });
     },
 });
+export default productSlice.reducer;
