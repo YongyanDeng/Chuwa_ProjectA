@@ -1,12 +1,12 @@
 import "./styles.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ShoppingCartOutlined, UserOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { ShoppingCartOutlined, UserOutlined, CloseOutlined } from "@ant-design/icons";
 import { Space, Input, Typography, Drawer, Button } from "antd";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
-import Cart from "./cart";
+import Cart from "components/Cart";
 import { logOut, getCart } from "app/userSlice";
 
 const { Search } = Input;
@@ -82,13 +82,22 @@ export default function Navbar() {
                 </div>
             </div>
             <Drawer
-                title={`Cart(${cart.length})`}
+                title={
+                    <>
+                        <Typography.Title level={4} style={{ margin: "0px 2px", color: "#fff" }}>
+                            Cart
+                        </Typography.Title>
+                        <Typography
+                            style={{ margin: "0px 2px", color: "#fff" }}
+                        >{`(${cart.length})`}</Typography>
+                    </>
+                }
                 placement="right"
                 closable={true}
                 open={open}
                 onClose={onClose}
                 style={{ zIndex: 99 }}
-                closeIcon={<CloseCircleOutlined />}
+                closeIcon={<CloseOutlined style={{ color: "#FFF", fontSize: "20px" }} />}
             >
                 <Cart cart={cart} />
             </Drawer>
