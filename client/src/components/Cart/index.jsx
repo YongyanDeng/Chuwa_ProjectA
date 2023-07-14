@@ -1,25 +1,45 @@
-import { Typography } from "antd";
+import "./styles.css";
+
+import { Typography, Button, Form, Col, Row, Input } from "antd";
+import ProductCard from "./ProductCard";
 
 export default function Cart({ cart }) {
-    // const products = [
-    //     { name: "product1", price: 10, quantity: 20 },
-    //     { name: "product2", price: 20, quantity: 20 },
-    //     { name: "product3", price: 30, quantity: 20 },
-    // ];
+    if (!cart.length) {
+        return (
+            <div>
+                <Typography.Paragraph className="EmptyDrawerHint">
+                    Your cart is empty. Go shopping!
+                </Typography.Paragraph>
+            </div>
+        );
+    }
 
     return (
-        <div>
-            {cart.length ? (
-                <ul>
-                    {cart.map((product) => (
-                        <li key={product.id}>
-                            <p>{`${product.name} ------------- ${product.quantity}`}</p>
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <Typography style={{ color: "#6B7280" }}>Your cart is empty</Typography>
-            )}
-        </div>
+        <>
+            <div className="products">
+                {cart.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                ))}
+            </div>
+            <div className="coupon">
+                <Form layout="vertical">
+                    <Row gutter={8} style={{ alignItems: "center" }}>
+                        <Col span={20}>
+                            <Form.Item name="discount" label="Apply Discount Code">
+                                <Input placeholder="Please enter discount code" size="large" />
+                            </Form.Item>
+                        </Col>
+                        <Col span={4}>
+                            <Button className="btn" htmlType="submit" size="large">
+                                Apply
+                            </Button>
+                        </Col>
+                    </Row>
+                </Form>
+            </div>
+            <div className="checkout">
+                <Button className="btn">Check Out</Button>
+            </div>
+        </>
     );
 }
