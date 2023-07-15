@@ -25,10 +25,11 @@ export const removeProductInCart = async ({ userId, productId }) => {
     return res;
 };
 
-export const checkout = async ({ id }) => {
+export const checkout = async ({ id, charge }) => {
     const res = await apiCall({
         url: `api/users/${id}/cart/checkout`,
         method: "POST",
+        data: { charge },
     });
     return res;
 };

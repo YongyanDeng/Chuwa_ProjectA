@@ -33,7 +33,12 @@ export default function Cart() {
     };
 
     const checkout = () => {
-        dispatch(checkoutCart(user));
+        dispatch(
+            checkoutCart({
+                id: user.id,
+                charge: (subTotal + tax - discount).toFixed(2),
+            })
+        );
     };
 
     if (!cart.length) {

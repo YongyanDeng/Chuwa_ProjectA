@@ -373,8 +373,8 @@ const checkout = async function (req, res, next) {
             });
         }
 
-        // calculate total price and update stock
-        var totalPrice = 0;
+        // update stock
+        const charge = +req.body.charge;
         for (const [productId, quantity] of user.cart) {
             // Find this product in Stock
             const product = await db.Product.findById(productId);
@@ -389,15 +389,13 @@ const checkout = async function (req, res, next) {
             }
 
             // Update stock and calculate total price
-            product.stockNum -= quantity;
-            totalPrice += quantity * product.price;
             user.cart.delete(productId);
 
             await product.save();
         }
         await user.save();
         return res.status(200).json({
-            message: `Total charge: $ ${totalPrice.toFixed(2)}. Thank you for your shopping!`,
+            message: `Total charge: $ ${charge}. Thank you for your shopping!`,
         });
     } catch (err) {
         return next(err);
