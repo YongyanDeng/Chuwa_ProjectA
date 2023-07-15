@@ -5,6 +5,12 @@
     align-items: center;
 }
 
+.title {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+}
+
 .searchBox {
     width: 500px;
     height: auto;
@@ -20,22 +26,26 @@
 
 .menu {
     display: flex;
-    align-items: baseline;
-    gap: 5px;
-    margin-right: 38px;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
 }
 
-.menu button {
+.menu Button {
     background: none;
     border: none;
     cursor: pointer;
-    align-items: baseline;
 }
 
-.ant-drawer-header {
-    background-color: #5048e5;
+.ant-popover-inner {
+    padding: 0 !important;
 }
-.ant-drawer-title {
+
+.ant-popover-inner-content {
     display: flex;
-    align-items: baseline;
+    flex-direction: column;
+    width: 600px;
+    max-height: 650px;
+    overflow: auto;
+    padding: 0px 10px;
 }

@@ -3,9 +3,7 @@ import style from "./style.module.css";
 
 import React from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { Button, Form, Input, Typography } from "antd";
-import FormItem from "antd/es/form/FormItem";
 
 /**
  * Form for signup & signin
@@ -24,9 +22,9 @@ export default function AuthForm({ buttonText, onSubmit, title, fields, errors, 
                 {title}
             </Typography.Title>
             {errors ? <Typography className={style.error}>{errors}</Typography> : null}
-            <Form onFinish={onSubmit} autoComplete="off">
+            <Form onFinish={onSubmit} autoComplete="off" layout="vertical">
                 {fields.map((field) => (
-                    <FormItem
+                    <Form.Item
                         key={field.name}
                         name={field.name}
                         label={field.name}
@@ -39,7 +37,7 @@ export default function AuthForm({ buttonText, onSubmit, title, fields, errors, 
                         ) : (
                             <Input.Password size="large" />
                         )}
-                    </FormItem>
+                    </Form.Item>
                 ))}
                 <Form.Item>
                     <Button
