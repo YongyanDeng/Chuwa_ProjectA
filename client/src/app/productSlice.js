@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
     fetchProducts,
+    fetchOneProduct,
     createProduct,
     deleteProduct,
     updateProduct,
@@ -9,6 +10,7 @@ import { removeError, addError } from './errorSlice';
 
 const initialState = {
     products: [],
+    oneProduct: null,
     status: 'idle',
 };
 
@@ -19,6 +21,21 @@ export const fetchProductsAction = createAsyncThunk(
             const products = await fetchProducts(data);
             thunkAPI.dispatch(removeError());
             return products;
+        } catch (error) {
+            const { message } = error;
+            thunkAPI.dispatch(addError(message));
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
+export const fetchOneProductAction = createAsyncThunk(
+    'products/fetchOneProduct',
+    async (data, thunkAPI) => {
+        try {
+            const oneProduct = await fetchOneProduct(data);
+            thunkAPI.dispatch(removeError());
+            return oneProduct;
         } catch (error) {
             const { message } = error;
             thunkAPI.dispatch(addError(message));
@@ -75,16 +92,31 @@ export const updateProductAction = createAsyncThunk(
 const productSlice = createSlice({
     name: 'products',
     initialState,
-    reducers: {},
+    reducers: {
+        // loadProducts: (state, action) => {
+        //     state.status = 'pending';
+        //     state.products = action.payload;
+        // },
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchProductsAction.fulfilled, (state, action) => {
             state.status = 'succeeded';
-            state.messages = action.payload;
+            state.products = action.payload;
         });
         builder.addCase(fetchProductsAction.rejected, (state, action) => {
             state.status = 'failed';
         });
         builder.addCase(fetchProductsAction.pending, (state, action) => {
+            state.status = 'pending';
+        });
+        builder.addCase(fetchOneProductAction.fulfilled, (state, action) => {
+            state.status = 'succeeded';
+            state.oneProduct = action.payload;
+        });
+        builder.addCase(fetchOneProductAction.rejected, (state, action) => {
+            state.status = 'failed';
+        });
+        builder.addCase(fetchOneProductAction.pending, (state, action) => {
             state.status = 'pending';
         });
         builder.addCase(createProductAction.fulfilled, (state, action) => {
@@ -100,7 +132,7 @@ const productSlice = createSlice({
         builder.addCase(deleteProductAction.fulfilled, (state, action) => {
             state.status = 'succeeded';
             state.products = state.products.filter(
-                (product) => product.id !== action.payload.id
+                (product) => product._id !== action.payload._id
             );
         });
         builder.addCase(deleteProductAction.rejected, (state, action) => {
@@ -112,7 +144,7 @@ const productSlice = createSlice({
         builder.addCase(updateProductAction.fulfilled, (state, action) => {
             state.status = 'succeeded';
             const productIndex = state.prodcuts.findIndex(
-                (product) => product.id === action.playload.id
+                (product) => product._id === action.playload._id
             );
             if (productIndex !== -1) {
                 state.status = 'succeeded';
@@ -127,4 +159,6 @@ const productSlice = createSlice({
         });
     },
 });
+
+export const { loadProducts } = productSlice.actions;
 export default productSlice.reducer;

@@ -7,7 +7,7 @@ export default configureStore({
     reducer: {
         user: userReducer,
         error: errorReducer,
-        product: productReducer,
+        products: productReducer,
     },
     devTools: true,
 });

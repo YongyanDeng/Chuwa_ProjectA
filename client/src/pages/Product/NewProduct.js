@@ -3,7 +3,7 @@ import ProductForm from 'components/ProductForm';
 import { useDispatch,useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createProductAction } from "app/productSlice";
-
+import ()
 export default funciton NewProduct(){
     const {user} = useSelector(state => state.user);
     const navigate =useNavigate();

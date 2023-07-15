@@ -8,9 +8,15 @@ export const createProduct = async ({ userId, product }) => {
     });
 };
 
-export const fetchProducts = async ({ userId }) => {
+export const fetchProducts = async () => {
     return await apiCall({
-        url: `/api/users/${userId}/products`,
+        url: `/api/products`,
+        method: 'GET',
+    });
+};
+export const fetchOneProduct = async (productId) => {
+    return await apiCall({
+        url: `/api/products/${productId}`,
         method: 'GET',
     });
 };

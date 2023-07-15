@@ -4,7 +4,7 @@ import Home from 'pages/Home';
 import SignUp from 'pages/Signup';
 import SignIn from 'pages/Signin';
 import ProtectLayout from 'components/Layout/ProtectLayout';
-
+import ProductDetail from 'pages/Product/ProductDetail';
 function App() {
     return (
         <BrowserRouter>
@@ -13,8 +13,8 @@ function App() {
                     <Route index element={<Home />} />
                     <Route path='signup' element={<SignUp />} />
                     <Route path='signin' element={<SignIn />} />
+                    <Route path='/products/:productId' element={<ProductDetail/>}></Route>
                     <Route element={<ProtectLayout />}>
-                        <Route></Route>
                     </Route>
                 </Route>
             </Routes>
@@ -23,3 +23,10 @@ function App() {
 }
 
 export default App;
+{
+    /* <Route */
+}
+// path='/api/products/:id'
+// element={<ProductDetail />}
+// />
+// </Route>

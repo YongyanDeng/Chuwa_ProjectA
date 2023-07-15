@@ -1,13 +1,15 @@
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = 'http://localhost:8080';
 
 export default async function apiCall({ url: apiUrl, method, data, headers }) {
     const url = new URL(apiUrl, BASE_URL).href;
     const defaultHeaders = {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
     };
 
-    if (localStorage.getItem("token")) {
-        defaultHeaders["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
+    if (localStorage.getItem('token')) {
+        defaultHeaders['Authorization'] = `Bearer ${localStorage.getItem(
+            'token'
+        )}`;
     }
 
     const response = await fetch(url, {
