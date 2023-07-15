@@ -1,26 +1,15 @@
-import {
-    Badge,
-    Button,
-    Card,
-    Image,
-    List,
-    message,
-    Rate,
-    Spin,
-    Typography,
-    Select,
-} from 'antd';
-import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchProductsAction } from 'app/productSlice';
-import { useNavigate, useParams } from 'react-router-dom';
-import styles from './style.module.css';
+import { Badge, Button, Card, Image, List, message, Rate, Spin, Typography, Select } from "antd";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchProductsAction } from "app/productSlice";
+import { useNavigate, useParams } from "react-router-dom";
+import styles from "./style.module.css";
 
 function Products() {
     const dispatch = useDispatch();
     const { products, status } = useSelector((state) => state.products);
     const { user } = useSelector((state) => state.user);
-    const [sortOrder, setSortOrder] = useState('az');
+    const [sortOrder, setSortOrder] = useState("az");
     const navigate = useNavigate();
 
     // const onSubmit = data =>{
@@ -39,21 +28,21 @@ function Products() {
             const aLowerCaseTitle = a.name.toLowerCase();
             const bLowerCaseTitle = b.name.toLowerCase();
 
-            if (sortOrder === 'az') {
+            if (sortOrder === "az") {
                 return aLowerCaseTitle > bLowerCaseTitle
                     ? 1
                     : aLowerCaseTitle === bLowerCaseTitle
                     ? 0
                     : -1;
-            } else if (sortOrder === 'za') {
+            } else if (sortOrder === "za") {
                 return aLowerCaseTitle < bLowerCaseTitle
                     ? 1
                     : aLowerCaseTitle === bLowerCaseTitle
                     ? 0
                     : -1;
-            } else if (sortOrder === 'lowHigh') {
+            } else if (sortOrder === "lowHigh") {
                 return a.price > b.price ? 1 : a.price === b.price ? 0 : -1;
-            } else if (sortOrder === 'highLow') {
+            } else if (sortOrder === "highLow") {
                 return a.price < b.price ? 1 : a.price === b.price ? 0 : -1;
             }
         });
@@ -71,37 +60,34 @@ function Products() {
                     onChange={(value) => {
                         setSortOrder(value);
                     }}
-                    defaultValue={'az'}
+                    defaultValue={"az"}
                     options={[
                         {
-                            label: 'Alphabetically a-z',
-                            value: 'az',
+                            label: "Alphabetically a-z",
+                            value: "az",
                         },
                         {
-                            label: 'Alphabetically z-a',
-                            value: 'za',
+                            label: "Alphabetically z-a",
+                            value: "za",
                         },
                         {
-                            label: 'Price Low to High',
-                            value: 'lowHigh',
+                            label: "Price Low to High",
+                            value: "lowHigh",
                         },
                         {
-                            label: 'Price High to Low',
-                            value: 'highLow',
+                            label: "Price High to Low",
+                            value: "highLow",
                         },
                     ]}
                 ></Select>
             </div>
             <List
-                loading={status === 'pending'}
+                loading={status === "pending"}
                 grid={{ column: 4 }}
                 dataSource={getSortedItems()}
                 renderItem={(product, index) => {
                     return (
-                        <Badge.Ribbon
-                            className={styles.itemCardBadge}
-                            color='pink'
-                        >
+                        <Badge.Ribbon className={styles.itemCardBadge} color="pink">
                             <Card
                                 className={styles.itemCard}
                                 title={product.name}
@@ -122,7 +108,7 @@ function Products() {
                                 <Card.Meta
                                     title={
                                         <Typography.Paragraph>
-                                            Price: ${product.price}{' '}
+                                            Price: ${product.price}{" "}
                                         </Typography.Paragraph>
                                     }
                                     description={
@@ -130,7 +116,7 @@ function Products() {
                                             ellipsis={{
                                                 rows: 2,
                                                 expandable: true,
-                                                symbol: 'more',
+                                                symbol: "more",
                                             }}
                                         >
                                             {product.description}
@@ -149,7 +135,7 @@ function Products() {
 function EditProductButton({ item }) {
     const [loading, setLoading] = useState(false);
     return (
-        <Button type='primary' onClick={() => {}} loading={loading}>
+        <Button type="primary" onClick={() => {}} loading={loading}>
             Edit
         </Button>
     );
@@ -178,7 +164,7 @@ function AddToCartButton({ item }) {
     return addCartCliked & (count > 0) ? (
         <Button.Group>
             <Button
-                type='primary'
+                type="primary"
                 onClick={() => {
                     incremenetClick();
                 }}
@@ -187,7 +173,7 @@ function AddToCartButton({ item }) {
             </Button>
             <div> {count} </div>
             <Button
-                type='primary'
+                type="primary"
                 onClick={() => {
                     decrementClick();
                 }}
@@ -197,7 +183,7 @@ function AddToCartButton({ item }) {
         </Button.Group>
     ) : (
         <Button
-            type='primary'
+            type="primary"
             onClick={() => {
                 addProductToCart();
             }}

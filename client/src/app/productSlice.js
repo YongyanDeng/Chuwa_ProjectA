@@ -1,21 +1,21 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
     fetchProducts,
     fetchOneProduct,
     createProduct,
     deleteProduct,
     updateProduct,
-} from 'services/products';
-import { removeError, addError } from './errorSlice';
+} from "services/products";
+import { removeError, addError } from "./errorSlice";
 
 const initialState = {
     products: [],
     oneProduct: null,
-    status: 'idle',
+    status: "idle",
 };
 
 export const fetchProductsAction = createAsyncThunk(
-    'products/fetchProducts',
+    "products/fetchProducts",
     async (data, thunkAPI) => {
         try {
             const products = await fetchProducts(data);
@@ -26,11 +26,11 @@ export const fetchProductsAction = createAsyncThunk(
             thunkAPI.dispatch(addError(message));
             return thunkAPI.rejectWithValue(message);
         }
-    }
+    },
 );
 
 export const fetchOneProductAction = createAsyncThunk(
-    'products/fetchOneProduct',
+    "products/fetchOneProduct",
     async (data, thunkAPI) => {
         try {
             const oneProduct = await fetchOneProduct(data);
@@ -41,11 +41,11 @@ export const fetchOneProductAction = createAsyncThunk(
             thunkAPI.dispatch(addError(message));
             return thunkAPI.rejectWithValue(message);
         }
-    }
+    },
 );
 
 export const createProductAction = createAsyncThunk(
-    'products/createProduct',
+    "products/createProduct",
     async (data, thunkAPI) => {
         try {
             const product = await createProduct(data);
@@ -56,11 +56,11 @@ export const createProductAction = createAsyncThunk(
             thunkAPI.dispatch(removeError());
             return thunkAPI.rejectWithValue(message);
         }
-    }
+    },
 );
 
 export const deleteProductAction = createAsyncThunk(
-    'products/deleteProduct',
+    "products/deleteProduct",
     async (data, thunkAPI) => {
         try {
             const product = await deleteProduct(data);
@@ -71,11 +71,11 @@ export const deleteProductAction = createAsyncThunk(
             thunkAPI.dispatch(removeError());
             return thunkAPI.rejectWithValue(message);
         }
-    }
+    },
 );
 
 export const updateProductAction = createAsyncThunk(
-    'products/updateProduct',
+    "products/updateProduct",
     async (data, thunkAPI) => {
         try {
             const product = await updateProduct(data);
@@ -86,11 +86,11 @@ export const updateProductAction = createAsyncThunk(
             thunkAPI.dispatch(removeError());
             return thunkAPI.rejectWithValue(message);
         }
-    }
+    },
 );
 
 const productSlice = createSlice({
-    name: 'products',
+    name: "products",
     initialState,
     reducers: {
         // loadProducts: (state, action) => {
@@ -100,62 +100,60 @@ const productSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchProductsAction.fulfilled, (state, action) => {
-            state.status = 'succeeded';
+            state.status = "succeeded";
             state.products = action.payload;
         });
         builder.addCase(fetchProductsAction.rejected, (state, action) => {
-            state.status = 'failed';
+            state.status = "failed";
         });
         builder.addCase(fetchProductsAction.pending, (state, action) => {
-            state.status = 'pending';
+            state.status = "pending";
         });
         builder.addCase(fetchOneProductAction.fulfilled, (state, action) => {
-            state.status = 'succeeded';
+            state.status = "succeeded";
             state.oneProduct = action.payload;
         });
         builder.addCase(fetchOneProductAction.rejected, (state, action) => {
-            state.status = 'failed';
+            state.status = "failed";
         });
         builder.addCase(fetchOneProductAction.pending, (state, action) => {
-            state.status = 'pending';
+            state.status = "pending";
         });
         builder.addCase(createProductAction.fulfilled, (state, action) => {
-            state.status = 'succeeded';
+            state.status = "succeeded";
             state.products.push(action.payload);
         });
         builder.addCase(createProductAction.rejected, (state, action) => {
-            state.status = 'failed';
+            state.status = "failed";
         });
         builder.addCase(createProductAction.pending, (state, action) => {
-            state.status = 'pending';
+            state.status = "pending";
         });
         builder.addCase(deleteProductAction.fulfilled, (state, action) => {
-            state.status = 'succeeded';
-            state.products = state.products.filter(
-                (product) => product._id !== action.payload._id
-            );
+            state.status = "succeeded";
+            state.products = state.products.filter((product) => product._id !== action.payload._id);
         });
         builder.addCase(deleteProductAction.rejected, (state, action) => {
-            state.status = 'failed';
+            state.status = "failed";
         });
         builder.addCase(deleteProductAction.pending, (state, action) => {
-            state.status = 'pending';
+            state.status = "pending";
         });
         builder.addCase(updateProductAction.fulfilled, (state, action) => {
-            state.status = 'succeeded';
+            state.status = "succeeded";
             const productIndex = state.prodcuts.findIndex(
-                (product) => product._id === action.playload._id
+                (product) => product._id === action.playload._id,
             );
             if (productIndex !== -1) {
-                state.status = 'succeeded';
+                state.status = "succeeded";
                 state.products[productIndex] = action.payload;
             }
         });
         builder.addCase(updateProductAction.rejected, (state, action) => {
-            state.status = 'failed';
+            state.status = "failed";
         });
         builder.addCase(updateProductAction.pending, (state, action) => {
-            state.status = 'pending';
+            state.status = "pending";
         });
     },
 });

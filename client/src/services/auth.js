@@ -1,9 +1,9 @@
-import apiCall from './api';
+import apiCall from "./api";
 
 export const signup = async (data) => {
     const res = await apiCall({
-        url: '/api/auth/signup',
-        method: 'POST',
+        url: "/api/auth/signup",
+        method: "POST",
         data,
     });
     return res;
@@ -11,8 +11,8 @@ export const signup = async (data) => {
 
 export const signin = async (data) => {
     const res = await apiCall({
-        url: '/api/auth/signin',
-        method: 'POST',
+        url: "/api/auth/signin",
+        method: "POST",
         data,
     });
     return res;

@@ -1,17 +1,17 @@
-import apiCall from './api';
+import apiCall from "./api";
 
 export const createProduct = async ({ userId, product }) => {
     return await apiCall({
         url: `/api/users/${userId}/products`,
-        method: 'POST',
+        method: "POST",
         data: { product },
     });
 };
 
-export const fetchProducts = async ({id}) => {
+export const fetchProducts = async ({ id }) => {
     return await apiCall({
         url: `/api/users/${id}/products`,
-        method: 'GET',
+        method: "GET",
     });
 };
 
@@ -24,19 +24,19 @@ export const fetchProducts = async ({id}) => {
 export const fetchOneProduct = async (productId) => {
     return await apiCall({
         url: `/api/products/${productId}`,
-        method: 'GET',
+        method: "GET",
     });
 };
 export const deleteProduct = async ({ userId, productId }) => {
     return await apiCall({
         url: `/api/users/${userId}/products/${productId}`,
-        method: 'DELETE',
+        method: "DELETE",
     });
 };
 export const updateProduct = async ({ userId, product }) => {
     return await apiCall({
         url: `/api/users/${userId}/products/${product.id}`,
-        method: 'PUT',
+        method: "PUT",
         data: { product },
     });
 };

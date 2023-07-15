@@ -1,18 +1,9 @@
-import { useEffect, useState } from 'react';
-import {
-    Card,
-    Col,
-    Row,
-    Space,
-    Image,
-    Typography,
-    Button,
-    message,
-} from 'antd';
-import { useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchOneProductAction } from 'app/productSlice';
-import styles from './style.module.css';
+import { useEffect, useState } from "react";
+import { Card, Col, Row, Space, Image, Typography, Button, message } from "antd";
+import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchOneProductAction } from "app/productSlice";
+import styles from "./style.module.css";
 
 function ProductDetail() {
     const dispatch = useDispatch();
@@ -54,7 +45,7 @@ function ProductDetail() {
                                 <Card.Meta
                                     title={
                                         <Typography.Paragraph>
-                                            Price: ${productId.price}{' '}
+                                            Price: ${productId.price}{" "}
                                         </Typography.Paragraph>
                                     }
                                     description={
@@ -62,7 +53,7 @@ function ProductDetail() {
                                             ellipsis={{
                                                 rows: 2,
                                                 expandable: true,
-                                                symbol: 'more',
+                                                symbol: "more",
                                             }}
                                         >
                                             Description:{productId.description}
@@ -82,7 +73,7 @@ function ProductDetail() {
 function EditProductButton({ item }) {
     const [loading, setLoading] = useState(false);
     return (
-        <Button type='primary' onClick={() => {}} loading={loading}>
+        <Button type="primary" onClick={() => {}} loading={loading}>
             Edit
         </Button>
     );
@@ -111,7 +102,7 @@ function AddToCartButton({ item }) {
     return addCartCliked & (count > 0) ? (
         <Button.Group>
             <Button
-                type='primary'
+                type="primary"
                 onClick={() => {
                     incremenetClick();
                 }}
@@ -120,7 +111,7 @@ function AddToCartButton({ item }) {
             </Button>
             <div> {count} </div>
             <Button
-                type='primary'
+                type="primary"
                 onClick={() => {
                     decrementClick();
                 }}
@@ -130,7 +121,7 @@ function AddToCartButton({ item }) {
         </Button.Group>
     ) : (
         <Button
-            type='primary'
+            type="primary"
             onClick={() => {
                 addProductToCart();
             }}

@@ -24,7 +24,7 @@ export default function ProductCard({ user, product }) {
                 userId: user.id,
                 productId: product.id,
                 curQuantity: value,
-            })
+            }),
         );
     };
 
@@ -40,7 +40,7 @@ export default function ProductCard({ user, product }) {
             removeCartProduct({
                 userId: user.id,
                 productId: product.id,
-            })
+            }),
         );
     };
 
