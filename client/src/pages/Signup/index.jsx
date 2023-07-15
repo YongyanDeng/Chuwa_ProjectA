@@ -1,26 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import AuthForm from "components/AuthForm";
-import { logOut, signUpUser } from "app/userSlice";
+import { signUpUser } from "app/userSlice";
 import { removeError } from "app/errorSlice";
+import { Typography } from "antd";
 
 export default function SignUp() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { message: error } = useSelector((state) => state.error);
     const [submitted, setSubmitted] = useState(false);
-    const { isAuthenticated } = useSelector((state) => state.user);
-
-    // Log out current user every time in this page
-    if (isAuthenticated) dispatch(logOut());
 
     useEffect(() => {
         dispatch(removeError());
     }, []);
 
-    // Show error if error !== null
+    // Redirect to signin page
     useEffect(() => {
         if (submitted && !error) navigate("/signin");
     }, [error]);
@@ -32,7 +29,11 @@ export default function SignUp() {
             rules: [
                 {
                     required: true,
-                    message: "Invalid Email Input",
+                    message: "Email Cannot be Empty",
+                },
+                {
+                    type: "email",
+                    message: "Invalid Email Format",
                 },
             ],
         },
@@ -63,6 +64,13 @@ export default function SignUp() {
                 title="Sign up an account"
                 fields={fields}
                 errors={error}
+                buttomText={
+                    <>
+                        <Typography>
+                            Already have an account? <Link to={"/signin"}>Sign in</Link>
+                        </Typography>
+                    </>
+                }
             ></AuthForm>
         </div>
     );

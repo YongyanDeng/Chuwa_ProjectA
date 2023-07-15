@@ -3,9 +3,7 @@ import style from "./style.module.css";
 
 import React from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { Button, Form, Input, Typography } from "antd";
-import FormItem from "antd/es/form/FormItem";
 
 /**
  * Form for signup & signin
@@ -15,7 +13,7 @@ import FormItem from "antd/es/form/FormItem";
  * @param {Object} fields
  * @param {Object} errors
  */
-export default function AuthForm({ buttonText, onSubmit, title, fields, errors }) {
+export default function AuthForm({ buttonText, onSubmit, title, fields, errors, buttomText }) {
     const { status } = useSelector((state) => state.user);
 
     return (
@@ -24,9 +22,9 @@ export default function AuthForm({ buttonText, onSubmit, title, fields, errors }
                 {title}
             </Typography.Title>
             {errors ? <Typography className={style.error}>{errors}</Typography> : null}
-            <Form onFinish={onSubmit} autoComplete="off">
+            <Form onFinish={onSubmit} autoComplete="off" layout="vertical">
                 {fields.map((field) => (
-                    <FormItem
+                    <Form.Item
                         key={field.name}
                         name={field.name}
                         label={field.name}
@@ -39,7 +37,7 @@ export default function AuthForm({ buttonText, onSubmit, title, fields, errors }
                         ) : (
                             <Input.Password size="large" />
                         )}
-                    </FormItem>
+                    </Form.Item>
                 ))}
                 <Form.Item>
                     <Button
@@ -53,20 +51,7 @@ export default function AuthForm({ buttonText, onSubmit, title, fields, errors }
                     </Button>
                 </Form.Item>
             </Form>
-            {buttonText.includes("Create account") ? (
-                <div className="buttomText">
-                    <Typography>
-                        Already have an account? <Link to={"/signin"}>Sign in</Link>
-                    </Typography>
-                </div>
-            ) : (
-                <div className="buttomText">
-                    <Typography>
-                        Don't have an account? <Link to={"/signup"}>Sign up</Link>
-                    </Typography>
-                    <Link className="right-link">Forget password?</Link>
-                </div>
-            )}
+            <div className="buttomText">{buttomText}</div>
         </div>
     );
 }

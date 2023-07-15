@@ -1,27 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Typography } from "antd";
 
 import AuthForm from "components/AuthForm";
-import { signInUser } from "app/userSlice";
 import { removeError } from "app/errorSlice";
+import { updatePassword } from "app/userSlice";
 
-export default function SignUp() {
+export default function UpdatePassword() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { isAuthenticated } = useSelector((state) => state.user);
     const { message: error } = useSelector((state) => state.error);
-    // const [submitted, setSubmitted] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
 
     useEffect(() => {
         dispatch(removeError());
     }, []);
 
-    // Automatically redirect to home page if user's logged in
+    // Redirect to signin page
     useEffect(() => {
-        if (isAuthenticated) navigate("/");
-    }, [isAuthenticated]);
+        if (submitted && !error) navigate("/signin");
+    }, [error]);
 
     const fields = [
         {
@@ -30,7 +28,7 @@ export default function SignUp() {
             rules: [
                 {
                     required: true,
-                    message: "Email Cannot be empty",
+                    message: "Email Cannot be Empty",
                 },
                 {
                     type: "email",
@@ -51,29 +49,20 @@ export default function SignUp() {
     ];
 
     const onSubmit = (data) => {
+        setSubmitted(true);
         // Convert to lowercase to match database's property
         const { Email: email, Password: password } = data;
-        dispatch(signInUser({ email, password }));
+        dispatch(updatePassword({ email, password }));
     };
 
     return (
         <div>
             <AuthForm
-                buttonText="Sign in"
+                buttonText="Update password"
                 onSubmit={onSubmit}
-                title="Sign in to your account"
+                title="Update your password"
                 fields={fields}
                 errors={error}
-                buttomText={
-                    <>
-                        <Typography>
-                            Don't have an account? <Link to={"/signup"}>Sign up</Link>
-                        </Typography>
-                        <Link className="right-link" to={"/updatepassword"}>
-                            Forget password?
-                        </Link>
-                    </>
-                }
             ></AuthForm>
         </div>
     );

@@ -6,6 +6,6 @@ const { reset } = require("nodemon");
 // /api/auth
 router.post("/signup", signup);
 router.post("/signin", signin);
-router.post("/passwordupdate", resetPassword);
+router.put("/passwordupdate", resetPassword);
 
 module.exports = router;
