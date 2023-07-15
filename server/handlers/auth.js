@@ -17,7 +17,7 @@ exports.signin = async function (req, res, next) {
                     category,
                     avatarUrl,
                 },
-                process.env.JWT_SECRET_KEY
+                process.env.JWT_SECRET_KEY,
             );
             return res.status(200).json({
                 id,
@@ -52,7 +52,7 @@ exports.signup = async function (req, res, next) {
                 category,
                 avatarUrl,
             },
-            process.env.JWT_SECRET_KEY
+            process.env.JWT_SECRET_KEY,
         );
         return res.status(200).json({
             id,

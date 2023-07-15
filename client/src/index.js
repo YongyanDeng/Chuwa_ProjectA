@@ -22,5 +22,5 @@ root.render(
         <StyleProvider hashPriority="low">
             <App />
         </StyleProvider>
-    </Provider>
+    </Provider>,
 );

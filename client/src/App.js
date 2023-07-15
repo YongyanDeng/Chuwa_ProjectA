@@ -7,7 +7,6 @@ import ProtectLayout from "components/Layout/ProtectLayout";
 import AuthProtectLayout from "components/Layout/AuthProtectLayout";
 import UpdatePassword from "pages/UpdatePassword";
 import NotFound from "pages/NotFound";
-
 function App() {
     return (
         <BrowserRouter>
@@ -19,9 +18,8 @@ function App() {
                         <Route path="signin" element={<SignIn />} />
                         <Route path="updatePassword" element={<UpdatePassword />} />
                     </Route>
-                    <Route element={<ProtectLayout />}>
-                        <Route></Route>
-                    </Route>
+                    <Route path="/products/:productId" element={<ProductDetail />}></Route>
+                    <Route element={<ProtectLayout />}></Route>
                     <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>
@@ -30,3 +28,10 @@ function App() {
 }
 
 export default App;
+{
+    /* <Route */
+}
+// path='/api/products/:id'
+// element={<ProductDetail />}
+// />
+// </Route>
