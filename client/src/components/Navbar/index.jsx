@@ -3,7 +3,7 @@ import "./styles.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
-import { Input, Typography, Drawer, Button, Popover } from "antd";
+import { Input, Typography, Button, Popover } from "antd";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
@@ -23,11 +23,6 @@ export default function Navbar() {
     const dispatch = useDispatch();
     const { isAuthenticated, user, cart, totalPrice } = useSelector((state) => state.user);
 
-    const updateTotalPrice = () => {
-        setOpen(!open);
-        // update total price
-    };
-
     useEffect(() => {
         if (isAuthenticated) dispatch(getCart(user));
     }, [isAuthenticated]);
@@ -44,11 +39,9 @@ export default function Navbar() {
     };
     const handleCartIconClick = () => {
         setOpen(true);
-        console.log("open");
     };
     const closePopover = () => {
         setOpen(false);
-        console.log("close");
     };
 
     return (
@@ -75,9 +68,9 @@ export default function Navbar() {
                 </div>
                 <div className="menu">
                     <Popover
-                        title={<CartTitle len={cart.length} closeHandle={closePopover} />}
+                        title={<CartTitle len={cart.length} handleCartClose={closePopover} />}
                         placement="bottom"
-                        content={<Cart cart={cart} />}
+                        content={<Cart />}
                         trigger="click"
                         open={open}
                         arrow={false}
@@ -99,27 +92,6 @@ export default function Navbar() {
                     </Paragraph>
                 </div>
             </div>
-            {/* <Drawer
-                title={
-                    <>
-                        <Typography.Title level={4} style={{ margin: "0px 2px", color: "#fff" }}>
-                            Cart
-                        </Typography.Title>
-                        <Typography
-                            style={{ margin: "0px 2px", color: "#fff" }}
-                        >{`(${cart.length})`}</Typography>
-                    </>
-                }
-                width={542}
-                placement="right"
-                closable={true}
-                open={open}
-                onClose={updateTotalPrice}
-                style={{ zIndex: 99 }}
-                closeIcon={<CloseOutlined style={{ color: "#FFF", fontSize: "20px" }} />}
-            >
-                <Cart cart={cart} />
-            </Drawer> */}
         </nav>
     );
 }
