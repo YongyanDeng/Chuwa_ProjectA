@@ -37,6 +37,10 @@
     cursor: pointer;
 }
 
+.ant-popover-title {
+    margin: 0 !important;
+}
+
 .ant-popover-inner {
     padding: 0 !important;
 }

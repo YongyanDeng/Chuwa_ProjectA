@@ -57,11 +57,23 @@
 }
 
 .product-quantity {
-    font-family: Inter;
+    display: flex;
     bottom: 0;
     position: absolute;
     padding: 0;
     left: 0;
+}
+
+.centered-input {
+    width: 40px;
+}
+.centered-input .ant-input-number-input {
+    text-align: center;
+}
+
+.clickable-addon {
+    cursor: pointer;
+    padding: 0 4px;
 }
 
 .product-remove {
@@ -74,7 +86,7 @@
 }
 
 .coupon {
-    padding: 0px 20px;
+    padding-left: 20px !important;
 }
 
 .checkout {
@@ -83,7 +95,26 @@
     box-shadow: 4px 0px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
+.checkout span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.checkout span h4 {
+    color: #111827;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px; /* 150% */
+    margin: 0;
+}
+
 .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: #fff;
     font-family: Inter;
     font-size: 14px;
@@ -92,4 +123,7 @@
     line-height: 137.5%; /* 19.25px */
     border-radius: 4px;
     background: #5048e5;
+    text-align: center;
+    width: 100%;
+    margin: 20px 0px;
 }

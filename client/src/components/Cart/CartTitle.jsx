@@ -6,14 +6,14 @@ import { CloseOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
 
-export default function CartTitle({ len, closeHandle }) {
+export default function CartTitle({ len, handleCartClose }) {
     return (
         <div className="cartTitle">
             <div className="titleText">
                 <Title level={3}>Cart</Title>
                 <Text>{`(${len})`}</Text>
             </div>
-            <CloseOutlined onClick={closeHandle} />
+            <CloseOutlined onClick={handleCartClose} />
         </div>
     );
 }

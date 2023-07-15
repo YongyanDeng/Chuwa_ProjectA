@@ -1,6 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { signup, signin, updatePassword as up } from "services/auth";
-import { getAllCartProducts } from "services/user";
+import {
+    getAllCartProducts,
+    changeCartProductQuantity,
+    removeProductInCart,
+    checkout,
+} from "services/user";
 import { addError, removeError } from "./errorSlice";
 
 const initialState = {
@@ -54,6 +59,45 @@ export const getCart = createAsyncThunk("currentUser/getCart", async (data, thun
         const cart = await getAllCartProducts(id);
         thunkAPI.dispatch(removeError());
         return cart;
+    } catch (err) {
+        thunkAPI.dispatch(addError(err.message));
+        return thunkAPI.rejectWithValue(err.message);
+    }
+});
+
+export const updateCartProduct = createAsyncThunk(
+    "currentUser/updateCartProduct",
+    async (data, thunkAPI) => {
+        try {
+            const res = await changeCartProductQuantity(data);
+            thunkAPI.dispatch(removeError());
+            return res;
+        } catch (err) {
+            thunkAPI.dispatch(addError(err.message));
+            return thunkAPI.rejectWithValue(err.message);
+        }
+    }
+);
+
+export const removeCartProduct = createAsyncThunk(
+    "currentUser/removeProductInCart",
+    async (data, thunkAPI) => {
+        try {
+            const res = await removeProductInCart(data);
+            thunkAPI.dispatch(removeError());
+            return res;
+        } catch (err) {
+            thunkAPI.dispatch(addError(err.message));
+            return thunkAPI.rejectWithValue(err.message);
+        }
+    }
+);
+
+export const checkoutCart = createAsyncThunk("currentUser/checkout", async (data, thunkAPI) => {
+    try {
+        const res = await checkout(data);
+        thunkAPI.dispatch(removeError());
+        return res;
     } catch (err) {
         thunkAPI.dispatch(addError(err.message));
         return thunkAPI.rejectWithValue(err.message);
@@ -115,7 +159,10 @@ const currentUserSlice = createSlice({
             state.status = "pending";
         });
 
-        // Get cart;
+        /**
+         * Get all products in user's cart
+         * @return [Array(Oject)] current cart
+         */
         builder.addCase(getCart.fulfilled, (state, action) => {
             const cart = action.payload;
             state.totalPrice = cart.reduce((total, product) => {
@@ -131,6 +178,64 @@ const currentUserSlice = createSlice({
             state.status = "failed";
         });
         builder.addCase(getCart.pending, (state, action) => {
+            state.status = "pending";
+        });
+
+        /**
+         * Update a product quantity in cart
+         * @return [Object{productId: quantity}] current cart
+         */
+        builder.addCase(updateCartProduct.fulfilled, (state, action) => {
+            const cart = action.payload.cart;
+            var total = 0;
+            state.cart.map((product) => {
+                product.quantity = cart[product.id];
+                total += product.quantity * product.price;
+                return product;
+            });
+            state.totalPrice = total;
+            state.status = "successed";
+        });
+        builder.addCase(updateCartProduct.rejected, (state, action) => {
+            state.status = "failed";
+        });
+        builder.addCase(updateCartProduct.pending, (state, action) => {
+            state.status = "pending";
+        });
+
+        // Remove product from user's cart, return the current cart
+        builder.addCase(removeCartProduct.fulfilled, (state, action) => {
+            const cart = action.payload.cart;
+            console.log(cart);
+            state.totalPrice = cart.reduce((total, product) => {
+                total += product.price * product.quantity;
+                return total;
+            }, 0);
+            state.cart = cart;
+            state.status = "successed";
+        });
+        builder.addCase(removeCartProduct.rejected, (state, action) => {
+            state.status = "failed";
+        });
+        builder.addCase(removeCartProduct.pending, (state, action) => {
+            state.status = "pending";
+        });
+
+        /**
+         * Checkout all products in cart
+         * @return [Ojbect] notification message
+         */
+        builder.addCase(checkoutCart.fulfilled, (state, action) => {
+            console.log(action.payload);
+
+            state.cart = [];
+            state.totalPrice = 0;
+            state.status = "successed";
+        });
+        builder.addCase(checkoutCart.rejected, (state, action) => {
+            state.status = "failed";
+        });
+        builder.addCase(checkoutCart.pending, (state, action) => {
             state.status = "pending";
         });
     },

@@ -6,6 +6,7 @@ import SignIn from "pages/Signin";
 import ProtectLayout from "components/Layout/ProtectLayout";
 import AuthProtectLayout from "components/Layout/AuthProtectLayout";
 import UpdatePassword from "pages/UpdatePassword";
+import NotFound from "pages/NotFound";
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                     <Route element={<ProtectLayout />}>
                         <Route></Route>
                     </Route>
+                    <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>
         </BrowserRouter>
