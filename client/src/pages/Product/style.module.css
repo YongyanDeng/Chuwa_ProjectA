@@ -1,3 +1,21 @@
+.productsContainer {
+    padding: 8px;
+}
+.btn {
+    width: 100%;
+    background-color: #5048e5;
+    columns: #ffffff;
+    margin-top: 10px;
+}
+.topContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.topContent > * {
+    margin-right: 8px;
+}
 .itemCard,
 .itemCardBadge {
     margin: 8px;
@@ -5,7 +23,4 @@
 .itemCardImage {
     height: 150px !important;
     object-fit: scale-down;
-}
-.productsContainer {
-    padding: 8px;
 }

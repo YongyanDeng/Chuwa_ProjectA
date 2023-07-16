@@ -50,6 +50,10 @@ export default function MainLayout() {
             justifyContent: "center",
             alignItems: "center",
             backgroundColor: "#F9FAFB",
+            overflowY: "auto",
+            marginTop: "20px",
+            flexDirection: "column",
+            flex: 1,
         }),
         [isMobile],
     );

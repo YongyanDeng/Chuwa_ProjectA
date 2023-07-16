@@ -1,0 +1,17 @@
+.itemCard,
+.itemCardBadge {
+    margin: 8px;
+}
+.itemCardImage {
+    height: 150px !important;
+    object-fit: scale-down;
+}
+.productsContainer {
+    padding: 8px;
+}
+.btn {
+    width: 100%;
+    background-color: #5048e5;
+    columns: #ffffff;
+    margin-top: 10px;
+}
