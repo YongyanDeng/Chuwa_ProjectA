@@ -141,13 +141,10 @@ const productSlice = createSlice({
         });
         builder.addCase(updateProductAction.fulfilled, (state, action) => {
             state.status = "succeeded";
-            const productIndex = state.prodcuts.findIndex(
-                (product) => product._id === action.playload._id,
+            const productIndex = state.products.findIndex(
+                (product) => product._id === action.payload._id,
             );
-            if (productIndex !== -1) {
-                state.status = "succeeded";
-                state.products[productIndex] = action.payload;
-            }
+            state.products[productIndex] = action.payload;
         });
         builder.addCase(updateProductAction.rejected, (state, action) => {
             state.status = "failed";

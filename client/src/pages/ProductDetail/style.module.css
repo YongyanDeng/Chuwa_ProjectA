@@ -1,4 +1,11 @@
-.itemCard,
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ensure the container fills the entire viewport height */
+    background-color: #f0f0f0; /* Set the background color as desired */
+    padding: 20px; /* Adjust the padding as needed */
+}
 .itemCardBadge {
     margin: 8px;
 }
@@ -14,4 +21,16 @@
     background-color: #5048e5;
     columns: #ffffff;
     margin-top: 10px;
+}
+.card {
+    height: 400px; /* Set the desired fixed height for the cards */
+}
+.cardActions {
+    display: flex;
+    justify-content: space-between;
+}
+.cardActions button {
+    height: auto;
+    line-height: normal;
+    padding: 6px 16px;
 }
