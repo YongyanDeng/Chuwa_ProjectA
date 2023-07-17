@@ -11,12 +11,12 @@ function ProductDetail() {
     const { productId } = useParams();
     useEffect(() => {
         dispatch(fetchOneProductAction(productId));
-    }, [dispatch, productId]);
+    }, [productId]);
     return (
-        <>
+        <div className={styles.container}>
             {oneProduct ? (
                 <div>
-                    <Row gutter={6}>
+                    <Row gutter={6} justify="center">
                         <Col span={12}>
                             <Card
                                 title={oneProduct.name}
@@ -30,17 +30,20 @@ function ProductDetail() {
                                         alt={oneProduct.name}
                                     />
                                 }
+                                className={styles.card}
                             ></Card>
                         </Col>
                         <Col span={12}>
                             <Card
-                                className={styles.itemCard}
                                 title={oneProduct.name}
                                 key={productId}
                                 actions={[
-                                    <AddToCartButton item={productId} />,
-                                    <EditProductButton item={productId} />,
+                                    <div className={styles.cardActions}>
+                                        <AddToCartButton item={productId} />
+                                        <EditProductButton item={productId} />
+                                    </div>,
                                 ]}
+                                className={styles.card}
                             >
                                 <Card.Meta
                                     title={
@@ -67,7 +70,7 @@ function ProductDetail() {
             ) : (
                 <p>Loading...</p>
             )}
-        </>
+        </div>
     );
 }
 function EditProductButton({ item }) {

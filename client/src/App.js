@@ -9,6 +9,7 @@ import UpdatePassword from "pages/UpdatePassword";
 import NotFound from "pages/NotFound";
 import ProductDetail from "pages/ProductDetail";
 import NewProduct from "pages/CreateProduct";
+import EditProduct from "pages/EditProduct";
 import Products from "pages/Product";
 function App() {
     return (
@@ -22,7 +23,10 @@ function App() {
                     <Route element={<AuthProtectLayout />}> </Route>
                     <Route path="/products/:productId" element={<ProductDetail />}></Route>
                     <Route path="/new-product" element={<NewProduct />}></Route>
-
+                    <Route
+                        path="/user/:id/edit-product/:productId"
+                        element={<EditProduct />}
+                    ></Route>
                     {/* <Route element={<ProtectLayout />}></Route> */}
                     {/* <Route path="*" element={<NotFound />} /> */}
                 </Route>

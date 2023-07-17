@@ -7,7 +7,6 @@ import { removeError } from "app/errorSlice";
 import styles from "./style.module.css";
 export default function NewProduct() {
     const { user } = useSelector((state) => state.user);
-    const { message: error } = useSelector((state) => state.error);
     // const [submitted, setSubmitted] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -34,7 +33,7 @@ export default function NewProduct() {
             imageUrl,
         };
 
-        dispatch(createProductAction({ userId: user.id, product: product })).then(() => {
+        dispatch(createProductAction({ id: user.id, product: product })).then(() => {
             navigate("/");
         });
     };
@@ -46,10 +45,11 @@ export default function NewProduct() {
     // }, [error]);
     return (
         <ProductForm
+            updateProduct={false}
+            product={{}}
             buttonText="Add product"
             onSubmit={onSubmit}
             title="Create new product"
-            errors={error}
         />
     );
 }

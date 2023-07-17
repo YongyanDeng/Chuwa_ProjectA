@@ -1,14 +1,27 @@
-import { Badge, Button, Card, Image, List, message, Typography, Select, Pagination } from "antd";
+import {
+    Badge,
+    Button,
+    Card,
+    Image,
+    List,
+    message,
+    Typography,
+    Select,
+    Pagination,
+    InputNumber,
+} from "antd";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchProductsAction } from "app/productSlice";
+import { fetchProductsAction, fetchOneProductAction } from "app/productSlice";
 import { useNavigate, useParams } from "react-router-dom";
+import { updateCartProduct, removeCartProduct } from "app/userSlice";
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import styles from "./style.module.css";
 
 function Products() {
     const dispatch = useDispatch();
     const { products, status } = useSelector((state) => state.products);
-    const { user } = useSelector((state) => state.user);
+    const { user, cart } = useSelector((state) => state.user);
     const [sortOrder, setSortOrder] = useState("lowHigh");
     const navigate = useNavigate();
 
@@ -54,7 +67,9 @@ function Products() {
 
             rows.push(rowItems);
         }
-        const transposedRows = rows[0].map((_, columnIndex) => rows.map((row) => row[columnIndex]));
+        const transposedRows = rows[0]?.map((_, columnIndex) =>
+            rows.map((row) => row[columnIndex]),
+        );
 
         return transposedRows;
     };
@@ -64,8 +79,9 @@ function Products() {
     };
 
     const editButtonClick = (product) => (e) => {
-        console.log(product);
-        navigate(`/products/${product._id}`);
+        dispatch(fetchOneProductAction(product._id)).then(() => {
+            navigate(`/user/${user.id}/edit-product/${product._id}`);
+        });
     };
     const addProductButtonClick = (e) => {
         navigate(`/new-product`);
@@ -110,51 +126,52 @@ function Products() {
                 renderItem={(row) => (
                     <List.Item style={{ height: "100%" }}>
                         {row.map((product, productIndex) => (
-                            <Badge.Ribbon
-                                className="itemCardBadge"
-                                text={`${product.discountPercentage}% Off`}
-                                color="pink"
+                            // <Badge.Ribbon
+                            //     className="itemCardBadge"
+                            //     text={`${product.discountPercentage}% Off`}
+                            //     color="pink"
+                            //     key={productIndex}
+                            // >
+                            <Card
                                 key={productIndex}
-                            >
-                                <Card
-                                    className={styles.itemCard}
-                                    title={product.name}
-                                    cover={
-                                        <Image
-                                            className={styles.itemCardBadge}
-                                            src={product.imageUrl}
-                                            alt={product.name}
-                                            onClick={imageHandleClick(product)}
-                                        />
-                                    }
-                                    actions={[
-                                        <AddToCartButton item={product} />,
-                                        <Button type="primary" onClick={editButtonClick(product)}>
-                                            Edit
-                                        </Button>,
-                                    ]}
-                                    style={{ flex: 1, height: "100%" }}
-                                >
-                                    <Card.Meta
-                                        title={
-                                            <Typography.Paragraph>
-                                                Price: ${product.price}
-                                            </Typography.Paragraph>
-                                        }
-                                        description={
-                                            <Typography.Paragraph
-                                                ellipsis={{
-                                                    rows: 2,
-                                                    expandable: true,
-                                                    symbol: "more",
-                                                }}
-                                            >
-                                                {product.description}
-                                            </Typography.Paragraph>
-                                        }
+                                className={styles.itemCard}
+                                title={product.name}
+                                cover={
+                                    <Image
+                                        className={styles.itemCardBadge}
+                                        src={product.imageUrl}
+                                        alt={product.name}
+                                        onClick={imageHandleClick(product)}
                                     />
-                                </Card>
-                            </Badge.Ribbon>
+                                }
+                                actions={[
+                                    <AddToCartButton product={product} user={user} />,
+                                    <Button type="primary" onClick={editButtonClick(product)}>
+                                        Edit
+                                    </Button>,
+                                ]}
+                                style={{ flex: 1, height: "100%" }}
+                            >
+                                <Card.Meta
+                                    title={
+                                        <Typography.Paragraph>
+                                            Price: ${product.price}
+                                        </Typography.Paragraph>
+                                    }
+                                    description={
+                                        <Typography.Paragraph
+                                            ellipsis={{
+                                                rows: 2,
+                                                expandable: true,
+                                                symbol: "more",
+                                            }}
+                                        >
+                                            {product.description}
+                                        </Typography.Paragraph>
+                                    }
+                                />
+                            </Card>
+                            // </Badge.Ribbon>
                         ))}
                     </List.Item>
                 )}
@@ -170,45 +187,56 @@ function Products() {
     );
 }
 
-function AddToCartButton({ item }) {
+function AddToCartButton({ product, user }) {
     const [loading, setLoading] = useState(false);
-    const [count, setCount] = useState(0);
     const [addCartCliked, setAddCartClicked] = useState(false);
+    const [amount, setAmount] = useState(0);
+    const [number, setNumber] = useState(0);
+    const dispatch = useDispatch();
 
     const addProductToCart = () => {
-        message.success(`${item.name} has been added to cart!`);
+        message.success(`${product.name} has been added to cart!`);
         setAddCartClicked(true);
-        setCount(count + 1);
+        setAmount(amount + 1);
+        setNumber(number + 1);
+        handleQuantityChange(amount + 1);
     };
 
-    const incremenetClick = () => {
-        setCount(count + 1);
+    // useEffect(() => {
+    //     setAmount(cart[product._id]);
+    // }, []);
+
+    const handleQuantityChange = (value) => {
+        setNumber(value);
+        setAmount(value);
+        dispatch(
+            updateCartProduct({
+                userId: user.id,
+                productId: product._id,
+                curQuantity: value,
+            }),
+        );
     };
-    const decrementClick = () => {
-        setCount(count - 1);
+
+    const handleDecrement = () => {
+        handleQuantityChange(amount - 1);
     };
+    const handleIncrement = () => {
+        handleQuantityChange(amount + 1);
+    };
+
     // useEffect(() => {
     //   if (count===0){setAddCartClicked(false)}
     // }, [count]);
-    return addCartCliked & (count > 0) ? (
+    return addCartCliked & (amount > 0) ? (
         <Button.Group>
+            <Button icon={<MinusOutlined />} onClick={handleDecrement} />
+            <InputNumber className="centered-input" value={amount} readOnly />
             <Button
-                type="primary"
-                onClick={() => {
-                    incremenetClick();
-                }}
-            >
-                +
-            </Button>
-            <div> {count} </div>
-            <Button
-                type="primary"
-                onClick={() => {
-                    decrementClick();
-                }}
-            >
-                -
-            </Button>
+                icon={<PlusOutlined />}
+                onClick={handleIncrement}
+                disabled={amount >= product.stockNum}
+            />
         </Button.Group>
     ) : (
         <Button
