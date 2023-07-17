@@ -39,6 +39,7 @@ export default function Navbar() {
     };
     const handleCartIconClick = () => {
         setOpen(true);
+        dispatch(getCart(user));
     };
     const closePopover = () => {
         setOpen(false);
