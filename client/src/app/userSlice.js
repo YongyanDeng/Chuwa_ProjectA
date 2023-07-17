@@ -50,7 +50,7 @@ export const updatePassword = createAsyncThunk(
             thunkAPI.dispatch(addError(err.message));
             return thunkAPI.rejectWithValue(err.message);
         }
-    }
+    },
 );
 
 export const getCart = createAsyncThunk("currentUser/getCart", async (data, thunkAPI) => {
@@ -76,7 +76,7 @@ export const updateCartProduct = createAsyncThunk(
             thunkAPI.dispatch(addError(err.message));
             return thunkAPI.rejectWithValue(err.message);
         }
-    }
+    },
 );
 
 export const removeCartProduct = createAsyncThunk(
@@ -90,7 +90,7 @@ export const removeCartProduct = createAsyncThunk(
             thunkAPI.dispatch(addError(err.message));
             return thunkAPI.rejectWithValue(err.message);
         }
-    }
+    },
 );
 
 export const checkoutCart = createAsyncThunk("currentUser/checkout", async (data, thunkAPI) => {

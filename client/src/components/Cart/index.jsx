@@ -37,7 +37,7 @@ export default function Cart() {
             checkoutCart({
                 id: user.id,
                 charge: (subTotal + tax - discount).toFixed(2),
-            }),
+            })
         ).then(() => {
             if (error) message.error(error);
             else message.success("Thank you for your shopping!");
