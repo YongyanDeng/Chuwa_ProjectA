@@ -389,6 +389,7 @@ const checkout = async function (req, res, next) {
             }
 
             // Update stock and calculate total price
+            product.stockNum -= quantity;
             user.cart.delete(productId);
 
             await product.save();
