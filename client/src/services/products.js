@@ -4,7 +4,7 @@ export const createProduct = async ({ userId, product }) => {
     return await apiCall({
         url: `/api/users/${userId}/products`,
         method: "POST",
-        data: { product },
+        data: product,
     });
 };
 
