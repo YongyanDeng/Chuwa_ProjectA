@@ -3,18 +3,25 @@ import ProductForm from "components/ProductForm";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createProductAction } from "app/productSlice";
+import { message } from "antd";
 import { removeError } from "app/errorSlice";
 import styles from "./style.module.css";
 export default function NewProduct() {
     const { user } = useSelector((state) => state.user);
-    // const [submitted, setSubmitted] = useState(false);
+    const { status } = useSelector((state) => state.products);
+    const { message: error } = useSelector((state) => state.error);
+    const [submitted, setSubmitted] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(removeError());
-    }, []);
+        if (status === "successed" && submitted) {
+            navigate("/");
+        } else if (status === "failed" && submitted) {
+            message.error(`${error}`);
+        }
+    }, [submitted, status]);
     const onSubmit = (data) => {
-        // setSubmitted(true);
+        setSubmitted(true);
         const {
             productName: name,
             productDescription: description,
@@ -33,9 +40,7 @@ export default function NewProduct() {
             imageUrl,
         };
 
-        dispatch(createProductAction({ id: user.id, product: product })).then(() => {
-            navigate("/");
-        });
+        dispatch(createProductAction({ id: user.id, product: product }));
     };
 
     // redirect to product list page

@@ -21,10 +21,9 @@ export const fetchProductsAction = createAsyncThunk(
             const products = await fetchProducts(data);
             thunkAPI.dispatch(removeError());
             return products;
-        } catch (error) {
-            const { message } = error;
-            thunkAPI.dispatch(addError(message));
-            return thunkAPI.rejectWithValue(message);
+        } catch (err) {
+            thunkAPI.dispatch(addError(err.message));
+            return thunkAPI.rejectWithValue(err.message);
         }
     },
 );
@@ -36,10 +35,9 @@ export const fetchOneProductAction = createAsyncThunk(
             const oneProduct = await fetchOneProduct(data);
             thunkAPI.dispatch(removeError());
             return oneProduct;
-        } catch (error) {
-            const { message } = error;
-            thunkAPI.dispatch(addError(message));
-            return thunkAPI.rejectWithValue(message);
+        } catch (err) {
+            thunkAPI.dispatch(addError(err.message));
+            return thunkAPI.rejectWithValue(err.message);
         }
     },
 );
@@ -51,10 +49,9 @@ export const createProductAction = createAsyncThunk(
             const product = await createProduct(data);
             thunkAPI.dispatch(removeError());
             return product;
-        } catch (error) {
-            const { message } = error;
-            thunkAPI.dispatch(removeError());
-            return thunkAPI.rejectWithValue(message);
+        } catch (err) {
+            thunkAPI.dispatch(addError(err.message));
+            return thunkAPI.rejectWithValue(err.message);
         }
     },
 );
@@ -66,10 +63,9 @@ export const deleteProductAction = createAsyncThunk(
             const product = await deleteProduct(data);
             thunkAPI.dispatch(removeError());
             return product;
-        } catch (error) {
-            const { message } = error;
-            thunkAPI.dispatch(removeError());
-            return thunkAPI.rejectWithValue(message);
+        } catch (err) {
+            thunkAPI.dispatch(addError(err.message));
+            return thunkAPI.rejectWithValue(err.message);
         }
     },
 );
@@ -81,10 +77,9 @@ export const updateProductAction = createAsyncThunk(
             const product = await updateProduct(data);
             thunkAPI.dispatch(removeError());
             return product;
-        } catch (error) {
-            const { message } = error;
-            thunkAPI.dispatch(removeError());
-            return thunkAPI.rejectWithValue(message);
+        } catch (err) {
+            thunkAPI.dispatch(addError(err.message));
+            return thunkAPI.rejectWithValue(err.message);
         }
     },
 );
