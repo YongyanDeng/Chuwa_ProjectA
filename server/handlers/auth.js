@@ -17,13 +17,35 @@ exports.signin = async function (req, res, next) {
                     category,
                     avatarUrl,
                 },
-                process.env.JWT_SECRET_KEY,
+                process.env.JWT_SECRET_KEY
             );
+
+            const cart = [];
+            for (const [key, value] of user.cart) {
+                const product = await db.Product.findById(key).populate("createdBy");
+                const { id, name, description, price, imageUrl, stockNum, createdBy } = product;
+                cart.push({
+                    id: id,
+                    name: name,
+                    description: description,
+                    price: price,
+                    quantity: value,
+                    imageUrl: imageUrl,
+                    stockNum,
+                    vendor: {
+                        id: createdBy.id,
+                        username: createdBy.username,
+                        avatarUrl: createdBy.avatarUrl,
+                    },
+                });
+            }
+
             return res.status(200).json({
                 id,
                 username,
                 category,
                 avatarUrl,
+                cart,
                 token,
             });
         } else {
@@ -52,7 +74,7 @@ exports.signup = async function (req, res, next) {
                 category,
                 avatarUrl,
             },
-            process.env.JWT_SECRET_KEY,
+            process.env.JWT_SECRET_KEY
         );
         return res.status(200).json({
             id,

@@ -53,3 +53,20 @@
     overflow: auto;
     padding: 0px 10px;
 }
+
+/* small screen responsive design */
+@media screen and (max-width: 375px) {
+    .navbar {
+        flex-wrap: wrap;
+    }
+
+    .searchBox {
+        flex-basis: 100%;
+        margin-top: 10px;
+    }
+
+    .menu {
+        flex-basis: 100%;
+        margin-top: 10px;
+    }
+}

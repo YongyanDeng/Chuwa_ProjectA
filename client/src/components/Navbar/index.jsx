@@ -56,9 +56,9 @@ export default function Navbar() {
             <Search className="searchBox" allowClear placeholder="Search" onSearch={handleSearch} />
             <div className="right-menu">
                 <div className="menu">
-                    <button>
+                    <Button>
                         <UserOutlined style={{ color: "#fff", fontSize: "20px" }} />
-                    </button>
+                    </Button>
                     <Button
                         type="link"
                         onClick={handleSignBtnClick}
