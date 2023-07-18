@@ -139,7 +139,9 @@ const currentUserSlice = createSlice({
         // Sign in
         builder.addCase(signInUser.fulfilled, (state, action) => {
             state.isAuthenticated = !!Object.keys(action.payload).length;
-            state.user = action.payload;
+            state.cart = action.payload.cart;
+            const { id, username, category, avatarUrl, token } = action.payload;
+            state.user = { id, username, category, avatarUrl, token };
             state.status = "successed";
         });
         builder.addCase(signInUser.rejected, (state, action) => {
