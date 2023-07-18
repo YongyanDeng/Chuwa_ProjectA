@@ -43,7 +43,6 @@ const createProduct = async (req, res, next) => {
             ...req.body,
             createdBy: req.params.id,
         });
-
         // Find the vendor and save product into vendor's stock
         const vendor = await db.User.findById(req.params.id);
         if (!vendor) {

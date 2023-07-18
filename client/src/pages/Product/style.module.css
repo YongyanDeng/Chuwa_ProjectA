@@ -1,5 +1,10 @@
 .productsContainer {
-    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    margin: 80px;
+    padding: 10px 70px;
 }
 .btn {
     width: 100%;
@@ -9,9 +14,10 @@
 }
 .topContent {
     display: flex;
+    width: 100%;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    padding-top: 50px;
 }
 .topContent > * {
     margin-right: 8px;

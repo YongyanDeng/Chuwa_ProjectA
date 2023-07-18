@@ -6,6 +6,7 @@ import {
     removeProductInCart,
     checkout,
 } from "services/user";
+import { addProductToCart } from "services/products";
 import { addError, removeError } from "./errorSlice";
 
 const initialState = {
@@ -65,6 +66,19 @@ export const getCart = createAsyncThunk("currentUser/getCart", async (data, thun
     }
 });
 
+export const addCartProduct = createAsyncThunk(
+    "currentUser/addCartProduct",
+    async (data, thunkAPI) => {
+        try {
+            const res = await addProductToCart(data);
+            thunkAPI.dispatch(removeError());
+            return res;
+        } catch (err) {
+            thunkAPI.dispatch(addError(err.message));
+            return thunkAPI.rejectWithValue(err.message);
+        }
+    },
+);
 export const updateCartProduct = createAsyncThunk(
     "currentUser/updateCartProduct",
     async (data, thunkAPI) => {
@@ -236,6 +250,18 @@ const currentUserSlice = createSlice({
             state.status = "failed";
         });
         builder.addCase(checkoutCart.pending, (state, action) => {
+            state.status = "pending";
+        });
+        // add product to user's cart, return the current cart
+        builder.addCase(addCartProduct.fulfilled, (state, action) => {
+            const cart = action.payload;
+            state.cart.push(cart);
+            state.status = "successed";
+        });
+        builder.addCase(addCartProduct.rejected, (state, action) => {
+            state.status = "failed";
+        });
+        builder.addCase(addCartProduct.pending, (state, action) => {
             state.status = "pending";
         });
     },

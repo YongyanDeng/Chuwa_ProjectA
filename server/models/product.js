@@ -31,6 +31,7 @@ const productSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
+    createdAt: { type: Date, default: Date.now, readonly: true },
 });
 
 productSchema.pre("deleteOne", { document: true }, async function (next) {

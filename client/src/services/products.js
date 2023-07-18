@@ -40,3 +40,11 @@ export const updateProduct = async ({ id, productId, product }) => {
         data: product,
     });
 };
+
+export const addProductToCart = async ({ id, product }) => {
+    return await apiCall({
+        url: `/api/users/${id}/cart`,
+        method: "POST",
+        data: product,
+    });
+};
