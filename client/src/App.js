@@ -11,7 +11,6 @@ import NotFound from "pages/NotFound";
 import ProductDetail from "pages/ProductDetail";
 import NewProduct from "pages/CreateProduct";
 import EditProduct from "pages/EditProduct";
-import Products from "pages/Product";
 
 function App() {
     return (

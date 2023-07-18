@@ -57,7 +57,7 @@ const createProduct = async (req, res, next) => {
             avatarUrl: true,
             category: true,
         });
-        return res.status(200).json({ newProduct });
+        return res.status(200).json(newProduct);
     } catch (err) {
         if (err.code === 11000) err.message = "Sorry, this product'name is taken!";
         return next({
