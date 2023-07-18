@@ -8,6 +8,11 @@ import AuthProtectLayout from "components/Layout/AuthProtectLayout";
 import UpdatePassword from "pages/UpdatePassword";
 import NotFound from "pages/NotFound";
 
+import ProductDetail from "pages/ProductDetail";
+import NewProduct from "pages/CreateProduct";
+import EditProduct from "pages/EditProduct";
+import Products from "pages/Product";
+
 function App() {
     return (
         <BrowserRouter>
@@ -20,7 +25,12 @@ function App() {
                         <Route path="updatePassword" element={<UpdatePassword />} />
                     </Route>
                     <Route element={<ProtectLayout />}>
-                        <Route></Route>
+                        <Route path="/products/:productId" element={<ProductDetail />}></Route>
+                        <Route path="/new-product" element={<NewProduct />}></Route>
+                        <Route
+                            path="/user/:id/edit-product/:productId"
+                            element={<EditProduct />}
+                        ></Route>
                     </Route>
                     <Route path="*" element={<NotFound />} />
                 </Route>
