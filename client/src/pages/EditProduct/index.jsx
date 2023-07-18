@@ -7,6 +7,7 @@ import { removeError } from "app/errorSlice";
 import { useParams } from "react-router-dom";
 import { Button, message } from "antd";
 import styles from "./style.module.css";
+
 export default function EditProduct() {
     const { id, productId } = useParams();
     const { oneProduct, status } = useSelector((state) => state.products);
@@ -35,7 +36,7 @@ export default function EditProduct() {
             price: price,
             category: category,
             inStockQuantity: stockNum,
-            ImageLink: imageUrl,
+            addImageLink: imageUrl,
         } = data;
         const product = { ...oneProduct };
         product.name = name;
@@ -51,11 +52,13 @@ export default function EditProduct() {
     useEffect(() => {
         dispatch(removeError());
     }, []);
+
     // redirect to product list page
     // useEffect(() => {
     //     console.log("submitted:", submitted);
     //     if (submitted && !error) navigate("/");
     // }, [error]);
+
     return (
         <>
             {status === "pending" ? (
