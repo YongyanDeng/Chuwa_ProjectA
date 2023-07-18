@@ -23,7 +23,7 @@ export default function MainLayout() {
             padding: "8px 64px",
             flexDirection: !isMobile ? "row" : "column",
         }),
-        [isMobile]
+        [isMobile],
     );
 
     const footerStyle = useMemo(
@@ -38,7 +38,7 @@ export default function MainLayout() {
             backgroundColor: "#111827",
             flexDirection: !isMobile ? "row" : "column",
         }),
-        [isMobile]
+        [isMobile],
     );
 
     const contentStyle = useMemo(
@@ -50,8 +50,12 @@ export default function MainLayout() {
             justifyContent: "center",
             alignItems: "center",
             backgroundColor: "#F9FAFB",
+            overflowY: "auto",
+            marginTop: "20px",
+            flexDirection: "column",
+            flex: 1,
         }),
-        [isMobile]
+        [isMobile],
     );
 
     return (

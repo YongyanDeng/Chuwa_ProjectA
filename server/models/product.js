@@ -25,8 +25,7 @@ const productSchema = new mongoose.Schema({
     },
     imageUrl: {
         type: String,
-        default:
-            "https://m.media-amazon.com/images/I/61RNOxTPxuL._AC_SY450_.jpg",
+        default: "https://m.media-amazon.com/images/I/61RNOxTPxuL._AC_SY450_.jpg",
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
