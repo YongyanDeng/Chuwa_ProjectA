@@ -32,6 +32,7 @@ function Products() {
 
     useEffect(() => {
         dispatch(fetchProductsAction(user));
+        dispatch(getCart(user));
     }, []);
     const getSortedItems = () => {
         const sortedItems = [...products];

@@ -19,7 +19,6 @@ import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 
 export default function AddToCartButton({ product, user }) {
     const [loading, setLoading] = useState(false);
-    const [addCartCliked, setAddCartClicked] = useState(false);
     const [amount, setAmount] = useState(0);
     const { cart } = useSelector((state) => state.user);
     const dispatch = useDispatch();
@@ -28,7 +27,6 @@ export default function AddToCartButton({ product, user }) {
             .then(() => {
                 message.success(`${product.name} has been added to cart!`);
                 dispatch(getCart(user));
-                setAddCartClicked(true);
                 setAmount(amount + 1);
             })
             .catch((error) => {
@@ -37,6 +35,14 @@ export default function AddToCartButton({ product, user }) {
             });
     };
 
+    useEffect(() => {
+        const productIndex = cart.findIndex((productInCart) => productInCart.id === product._id);
+        if (productIndex !== -1) {
+            setAmount(cart[productIndex].quantity);
+        } else {
+            setAmount(0);
+        }
+    }, []);
     useEffect(() => {
         const productIndex = cart.findIndex((productInCart) => productInCart.id === product._id);
         if (productIndex !== -1) {
@@ -66,7 +72,7 @@ export default function AddToCartButton({ product, user }) {
         handleQuantityChange(amount + 1);
     };
 
-    return addCartCliked & (amount > 0) ? (
+    return amount > 0 ? (
         <Button.Group>
             <Button icon={<MinusOutlined />} onClick={handleDecrement} />
             <InputNumber className="centered-input" value={amount} readOnly />
