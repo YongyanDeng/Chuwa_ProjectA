@@ -10,6 +10,7 @@ import { updateCartProduct, removeCartProduct } from "app/userSlice";
 const { Title } = Typography;
 
 export default function ProductCard({ user, product }) {
+    const { cart } = useSelector((state) => state.user);
     const [amount, setAmount] = useState(null);
     const { cart } = useSelector((state) => state.user);
     const dispatch = useDispatch();

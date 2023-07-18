@@ -2,7 +2,7 @@ import "./styles.css";
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Typography, Button, Form, Col, Row, Input } from "antd";
+import { Typography, Button, Form, Col, Row, Input, message } from "antd";
 
 import ProductCard from "./ProductCard";
 import { checkoutCart } from "app/userSlice";
@@ -37,8 +37,11 @@ export default function Cart() {
             checkoutCart({
                 id: user.id,
                 charge: (subTotal + tax - discount).toFixed(2),
-            }),
-        );
+            })
+        ).then(() => {
+            if (error) message.error(error);
+            else message.success("Thank you for your shopping!");
+        });
     };
 
     if (!cart.length) {
