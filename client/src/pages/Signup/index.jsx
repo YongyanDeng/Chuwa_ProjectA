@@ -10,6 +10,7 @@ import { Typography } from "antd";
 export default function SignUp() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { status } = useSelector((state) => state.user);
     const { message: error } = useSelector((state) => state.error);
     const [submitted, setSubmitted] = useState(false);
 
@@ -19,8 +20,8 @@ export default function SignUp() {
 
     // Redirect to signin page
     useEffect(() => {
-        if (submitted && !error) navigate("/signin");
-    }, [error]);
+        if (submitted && status === "successed") navigate("/signin");
+    }, [status]);
 
     const fields = [
         {
