@@ -2,16 +2,28 @@ import React, { useState, useEffect } from "react";
 import ProductForm from "components/ProductForm";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchOneProductAction, updateProductAction } from "app/productSlice";
+import { deleteProductAction, updateProductAction } from "app/productSlice";
 import { removeError } from "app/errorSlice";
 import { useParams } from "react-router-dom";
+import { Button, message } from "antd";
 import styles from "./style.module.css";
 export default function EditProduct() {
     const { id, productId } = useParams();
     const { oneProduct, status } = useSelector((state) => state.products);
+    const { user } = useSelector((state) => state.user);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const deleteButtonClick = (e) => {
+        if ((user.category === "VENDOR") & (oneProduct.createdBy === id)) {
+            dispatch(deleteProductAction({ id: id, productId: productId })).then(() => {
+                message.success("the product is deleted successfully");
+                navigate(`/`);
+            });
+        } else {
+            message.error(`Unauthorized`);
+        }
+    };
     // useEffect(() => {
     //     dispatch(fetchOneProductAction(productId));
     // }, []);
@@ -46,16 +58,26 @@ export default function EditProduct() {
     // }, [error]);
     return (
         <>
-            {status === "loading" ? (
+            {status === "pending" ? (
                 <div>Loading...</div>
             ) : status === "succeeded" ? (
-                <ProductForm
-                    updateProduct={true}
-                    product={oneProduct}
-                    buttonText="Update product"
-                    onSubmit={onSubmit}
-                    title="Update product"
-                />
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <ProductForm
+                        updateProduct={true}
+                        product={oneProduct}
+                        buttonText="Update product"
+                        onSubmit={onSubmit}
+                        title="Update product"
+                    />
+                    <Button
+                        type="primary"
+                        onClick={() => {
+                            deleteButtonClick();
+                        }}
+                    >
+                        Delete
+                    </Button>
+                </div>
             ) : (
                 <div>Failed to fetch product data.</div>
             )}

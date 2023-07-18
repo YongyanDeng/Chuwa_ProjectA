@@ -1,17 +1,32 @@
 import { useEffect, useState } from "react";
-import { Card, Col, Row, Space, Image, Typography, Button, message } from "antd";
-import { useParams } from "react-router-dom";
+import { Card, Col, Row, Space, Image, Typography, Button, message, InputNumber } from "antd";
+
 import { useSelector, useDispatch } from "react-redux";
 import { fetchOneProductAction } from "app/productSlice";
+import { useNavigate, useParams } from "react-router-dom";
+import { updateCartProduct, addCartProduct, getCart } from "app/userSlice";
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
+import AddToCartButton from "components/Product/AddToCart";
 import styles from "./style.module.css";
 
 function ProductDetail() {
     const dispatch = useDispatch();
     const { oneProduct, status } = useSelector((state) => state.products);
+    const { user } = useSelector((state) => state.user);
     const { productId } = useParams();
+    const navigate = useNavigate();
     useEffect(() => {
         dispatch(fetchOneProductAction(productId));
     }, [productId]);
+    const editButtonClick = (product) => (e) => {
+        if ((user.category === "VENDOR") & (product.createdBy === user.id)) {
+            dispatch(fetchOneProductAction(product._id)).then(() => {
+                navigate(`/user/${user.id}/edit-product/${product._id}`);
+            });
+        } else {
+            message.error(`Unauthorized`);
+        }
+    };
     return (
         <div className={styles.container}>
             {oneProduct ? (
@@ -38,11 +53,22 @@ function ProductDetail() {
                                 title={oneProduct.name}
                                 key={productId}
                                 actions={[
-                                    <div className={styles.cardActions}>
-                                        <AddToCartButton item={productId} />
-                                        <EditProductButton item={productId} />
+                                    <div
+                                        style={{ display: "flex", justifyContent: "space-between" }}
+                                    >
+                                        <AddToCartButton product={oneProduct} user={user} />
+                                        {user.category === "VENDOR" && (
+                                            <Button
+                                                type="primary"
+                                                onClick={editButtonClick(oneProduct)}
+                                            >
+                                                Edit
+                                            </Button>
+                                        )}
+                                        ,
                                     </div>,
                                 ]}
+                                style={{ flex: 1, height: "100%" }}
                                 className={styles.card}
                             >
                                 <Card.Meta
@@ -73,65 +99,5 @@ function ProductDetail() {
         </div>
     );
 }
-function EditProductButton({ item }) {
-    const [loading, setLoading] = useState(false);
-    return (
-        <Button type="primary" onClick={() => {}} loading={loading}>
-            Edit
-        </Button>
-    );
-}
 
-function AddToCartButton({ item }) {
-    const [loading, setLoading] = useState(false);
-    const [count, setCount] = useState(0);
-    const [addCartCliked, setAddCartClicked] = useState(false);
-
-    const addProductToCart = () => {
-        message.success(`${item.name} has been added to cart!`);
-        setAddCartClicked(true);
-        setCount(count + 1);
-    };
-
-    const incremenetClick = () => {
-        setCount(count + 1);
-    };
-    const decrementClick = () => {
-        setCount(count - 1);
-    };
-    // useEffect(() => {
-    //   if (count===0){setAddCartClicked(false)}
-    // }, [count]);
-    return addCartCliked & (count > 0) ? (
-        <Button.Group>
-            <Button
-                type="primary"
-                onClick={() => {
-                    incremenetClick();
-                }}
-            >
-                +
-            </Button>
-            <div> {count} </div>
-            <Button
-                type="primary"
-                onClick={() => {
-                    decrementClick();
-                }}
-            >
-                -
-            </Button>
-        </Button.Group>
-    ) : (
-        <Button
-            type="primary"
-            onClick={() => {
-                addProductToCart();
-            }}
-            loading={loading}
-        >
-            Add to Cart
-        </Button>
-    );
-}
 export default ProductDetail;

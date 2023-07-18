@@ -1,7 +1,7 @@
 import "./styles.css";
 
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { Image, Col, Row, InputNumber, Button, Typography } from "antd";
 
@@ -11,11 +11,12 @@ const { Title } = Typography;
 
 export default function ProductCard({ user, product }) {
     const [amount, setAmount] = useState(null);
+    const { cart } = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
     useEffect(() => {
         setAmount(product.quantity);
-    }, []);
+    }, [cart]);
 
     const handleQuantityChange = (value) => {
         setAmount(value);
