@@ -84,13 +84,17 @@ export default function AddToCartButton({ product, user }) {
         </Button.Group>
     ) : (
         <Button
+            style={{
+                width: "110px",
+                height: "26px",
+            }}
             type="primary"
             onClick={() => {
                 addProductToCart();
             }}
             loading={loading}
         >
-            Add to Cart
+            Add
         </Button>
     );
 }

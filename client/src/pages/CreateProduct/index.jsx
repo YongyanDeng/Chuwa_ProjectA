@@ -13,6 +13,8 @@ export default function NewProduct() {
     const [submitted, setSubmitted] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    // Access the state data
     useEffect(() => {
         if (status === "successed" && submitted) {
             navigate("/");

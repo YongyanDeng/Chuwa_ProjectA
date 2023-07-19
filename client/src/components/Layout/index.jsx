@@ -46,6 +46,7 @@ export default function MainLayout() {
             width: !isMobile ? "100%" : "392px",
             height: !isMobile ? "calc(100vh - 48px - 85px)" : "auto",
             padding: !isMobile ? "0 50px" : "0 6px",
+            width: !isMobile ? "100%" : "392px",
             justifyContent: "center",
             alignItems: "center",
             backgroundColor: "#F9FAFB",
