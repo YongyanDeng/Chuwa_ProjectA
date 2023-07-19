@@ -17,4 +17,5 @@ Chuwa Fullstack Training - Project A
 ## Demo Accounts
 
 account: demo@vendor.com password: 123
+`-------------------------------------------------------`
 account: demo@user.com password: 123
