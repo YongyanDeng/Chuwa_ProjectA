@@ -32,27 +32,6 @@ function Products() {
     const location = useLocation();
     const [currentPage, setCurrentPage] = useState(1);
 
-    useEffect(() => {
-        dispatch(fetchProductsAction(user));
-        dispatch(getCart(user));
-    }, []);
-    const getSortedItems = () => {
-        const sortedItems = [...products];
-        sortedItems.sort((a, b) => {
-            if (sortOrder === "lowHigh") {
-                return a.price > b.price ? 1 : a.price === b.price ? 0 : -1;
-            } else if (sortOrder === "highLow") {
-                return a.price < b.price ? 1 : a.price === b.price ? 0 : -1;
-            } else if (sortOrder === "lastAdded") {
-                return b.createdAt - a.createdAt;
-            }
-        });
-        return sortedItems;
-    };
-    const handlePaginationChange = (page) => {
-        setCurrentPage(page);
-        dispatch(getCart(user));
-    };
     let itemsPerPage = 8;
     let rowItemNumber = 4;
     if (isMobile) {
@@ -148,6 +127,31 @@ function Products() {
         }
         return null;
     };
+
+    const getSortedItems = () => {
+        const sortedItems = [...products];
+        sortedItems.sort((a, b) => {
+            if (sortOrder === "lowHigh") {
+                return a.price > b.price ? 1 : a.price === b.price ? 0 : -1;
+            } else if (sortOrder === "highLow") {
+                return a.price < b.price ? 1 : a.price === b.price ? 0 : -1;
+            } else if (sortOrder === "lastAdded") {
+                return b.createdAt - a.createdAt;
+            }
+        });
+        return sortedItems;
+    };
+
+    useEffect(() => {
+        dispatch(fetchProductsAction(user));
+        dispatch(getCart(user));
+    }, []);
+
+    const handlePaginationChange = (page) => {
+        setCurrentPage(page);
+        dispatch(getCart(user));
+    };
+
     const imageHandleClick = (product) => (e) => {
         console.log(product);
         navigate(`/products/${product._id}`);
