@@ -29,7 +29,7 @@
 }
 
 .ant-image {
-    flex-shrink: 0;
+    flex-shrink: 1;
 }
 
 .product-text,
@@ -126,4 +126,17 @@
     text-align: center;
     width: 100%;
     margin: 20px 0px;
+}
+
+@media screen and (max-width: 392px) {
+    .ant-popover-inner {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .ant-popover-inner-content {
+        width: 100%;
+        flex-shrink: 1;
+        padding: 10px;
+    }
 }

@@ -3,9 +3,8 @@ import "./styles.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
-import { Input, Typography, Button, Popover } from "antd";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { Input, Typography, Button, Popover, Space, message } from "antd";
+import { useSelector, useDispatch } from "react-redux";
 
 import Cart from "components/Cart";
 import CartTitle from "components/Cart/CartTitle";
@@ -38,8 +37,12 @@ export default function Navbar() {
         navigate("/signin");
     };
     const handleCartIconClick = () => {
-        setOpen(true);
-        dispatch(getCart(user));
+        if (isAuthenticated) {
+            setOpen(true);
+            dispatch(getCart(user));
+        } else {
+            message.error("Please sign in first!");
+        }
     };
     const closePopover = () => {
         setOpen(false);
@@ -56,15 +59,11 @@ export default function Navbar() {
             <Search className="searchBox" allowClear placeholder="Search" onSearch={handleSearch} />
             <div className="right-menu">
                 <div className="menu">
-                    <Button>
-                        <UserOutlined style={{ color: "#fff", fontSize: "20px" }} />
-                    </Button>
-                    <Button
-                        type="link"
-                        onClick={handleSignBtnClick}
-                        style={{ color: "#FFF", fontFamily: "Inter", fontSize: "15px" }}
-                    >
-                        {isAuthenticated ? `Sign Out` : `Sign In`}
+                    <Button onClick={handleSignBtnClick}>
+                        <Space style={{ color: "#FFF", fontFamily: "Inter", fontSize: "15px" }}>
+                            <UserOutlined style={{ fontSize: "20px" }} />
+                            {isAuthenticated ? `Sign Out` : `Sign In`}
+                        </Space>
                     </Button>
                 </div>
                 <div className="menu">
@@ -77,20 +76,12 @@ export default function Navbar() {
                         arrow={false}
                     >
                         <Button onClick={handleCartIconClick}>
-                            <ShoppingCartOutlined style={{ color: "#fff", fontSize: "23px" }} />
+                            <Space style={{ color: "#FFF", fontFamily: "Inter", fontSize: "15px" }}>
+                                <ShoppingCartOutlined style={{ fontSize: "23px" }} />
+                                {`$ ${totalPrice.toFixed(2)}`}
+                            </Space>
                         </Button>
                     </Popover>
-
-                    <Paragraph
-                        style={{
-                            color: "#FFF",
-                            fontFamily: "Inter",
-                            fontSize: "15px",
-                            margin: "0px",
-                        }}
-                    >
-                        {`$ ${totalPrice.toFixed(2)}`}
-                    </Paragraph>
                 </div>
             </div>
         </nav>

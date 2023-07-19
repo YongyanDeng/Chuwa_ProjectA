@@ -1,36 +1,142 @@
+.product_detail {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 60px;
+}
+
+.title {
+    /* Typography/H4 */
+    font-family: Inter;
+    font-weight: 700;
+    line-height: 137.5%;
+}
+
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Ensure the container fills the entire viewport height */
-    background-color: #f0f0f0; /* Set the background color as desired */
+    width: 1300px;
+    height: 600px;
+    /*min-height: 100vh; /* Ensure the container fills the entire viewport height */
+    background-color: #ffffff; /* Set the background color as desired */
     padding: 20px; /* Adjust the padding as needed */
 }
-.itemCardBadge {
-    margin: 8px;
+
+.col_left {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: center;
+    height: 100%;
 }
+
+.col_right {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: flex-start;
+    height: 100%;
+}
+
 .itemCardImage {
     height: 150px !important;
-    object-fit: scale-down;
+    /* object-fit: scale-down; */
 }
+
+.product_category {
+    text-align: left;
+
+    color: #6b7280;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 137.5%; /* 22px */
+}
+
+.product_name {
+    color: #535353;
+    /* Typography/H4 */
+    font-family: Inter;
+    font-size: 32px !important;
+    font-style: normal;
+    font-weight: 700 !important;
+    line-height: 137.5% !important; /* 44px */
+    margin: 10px 0px !important;
+}
+
+.product_price_tag {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.product_price {
+    color: #111827;
+    /* Typography/H4 */
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 700 !important;
+    line-height: 137.5% !important; /* 44px */
+    margin: 0px !important;
+}
+
+.product_description {
+    color: #6b7280;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 137.5%; /* 22px */
+    margin: 10px 0px !important;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
 .productsContainer {
     padding: 8px;
 }
+
 .btn {
     width: 100%;
     background-color: #5048e5;
     columns: #ffffff;
     margin-top: 10px;
 }
+
+.edit_btn {
+    color: #535353;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px; /* 171.429% */
+
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: #fff;
+}
+
 .card {
     height: 400px; /* Set the desired fixed height for the cards */
 }
+
 .cardActions {
     display: flex;
     justify-content: space-between;
 }
+
 .cardActions button {
     height: auto;
     line-height: normal;
     padding: 6px 16px;
+}
+
+@media screen and (max-width: 392px) {
 }

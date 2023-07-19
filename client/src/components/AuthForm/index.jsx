@@ -51,7 +51,7 @@ export default function AuthForm({ buttonText, onSubmit, title, fields, errors, 
                     </Button>
                 </Form.Item>
             </Form>
-            <div className="buttomText">{buttomText}</div>
+            <div className={style.buttomText}>{buttomText}</div>
         </div>
     );
 }

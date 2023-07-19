@@ -9,15 +9,15 @@ import { useMediaQuery } from "hooks/useMediaQuery";
 const { Header, Content, Footer } = Layout;
 
 export default function MainLayout() {
-    const isMobile = useMediaQuery("(max-width: 375px)");
+    const isMobile = useMediaQuery("(max-width: 392px)");
 
     const headerStyle = useMemo(
         () => ({
             display: "flex",
-            // justifyContent: "space-between",
-            alignItems: !isMobile ? null : "flex-start",
+            justifyContent: "space-between",
+            alignItems: !isMobile ? null : "center",
             // width: "100%",
-            width: !isMobile ? "100%" : "375px",
+            width: !isMobile ? "100%" : "392px",
             height: !isMobile ? "48px" : "auto",
             backgroundColor: "#111827",
             padding: "8px 64px",
@@ -29,10 +29,9 @@ export default function MainLayout() {
     const footerStyle = useMemo(
         () => ({
             display: "flex",
-            // justifyContent: "space-between",
-            // alignItems: "center",
-            // width: "100%",
-            width: !isMobile ? "100%" : "375px",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: !isMobile ? "100%" : "392px",
             height: !isMobile ? "85px" : "auto",
             color: "#FFFFFF",
             backgroundColor: "#111827",
@@ -44,9 +43,9 @@ export default function MainLayout() {
     const contentStyle = useMemo(
         () => ({
             display: "flex",
+            width: !isMobile ? "100%" : "392px",
             height: !isMobile ? "calc(100vh - 48px - 85px)" : "auto",
             padding: "0 50px",
-            width: !isMobile ? "100%" : "375px",
             justifyContent: "center",
             alignItems: "center",
             backgroundColor: "#F9FAFB",
