@@ -11,11 +11,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchOneProductAction } from "app/productSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { updateCartProduct, addCartProduct, getCart } from "app/userSlice";
+import { useMediaQuery } from "hooks/useMediaQuery";
 
 import AddToCartButton from "components/Product/AddToCart";
 import styles from "./style.module.css";
 
 function ProductDetail() {
+    const isMobile = useMediaQuery("(max-width: 392px)");
+
     const dispatch = useDispatch();
     const { oneProduct, status } = useSelector((state) => state.products);
     const { user } = useSelector((state) => state.user);
@@ -36,29 +39,25 @@ function ProductDetail() {
         }
     };
 
+    if (!oneProduct)
+        return (
+            <>
+                <p>Loading...</p>
+            </>
+        );
+
     return (
         <>
-            {oneProduct ? (
+            {!isMobile ? (
                 <div className={styles.product_detail}>
-                    <Typography.Title level={2} className={styles.title}>
-                        Products Detail
-                    </Typography.Title>
+                    <div className={styles.title_box}>
+                        <Typography.Title level={2} className={styles.title}>
+                            Products Detail
+                        </Typography.Title>
+                    </div>
+
                     <Row className={styles.container} gutter={6} justify="center">
                         <Col span={12} className={styles.col_left}>
-                            {/* <Card
-                                title={oneProduct.name}
-                                bordered={false}
-                                bodyStyle={{ padding: 0 }}
-                                key={productId}
-                                cover={
-                                    <Image
-                                        className={styles.itemCardBadge}
-                                        src={oneProduct.imageUrl}
-                                        alt={oneProduct.name}
-                                    />
-                                }
-                                className={styles.card}
-                            ></Card> */}
                             <Image
                                 className={styles.itemCardBadge}
                                 width={"550px"}
@@ -103,53 +102,62 @@ function ProductDetail() {
                                     </Button>
                                 )}
                             </div>
-
-                            {/* <Card
-                                title={oneProduct.name}
-                                key={productId}
-                                actions={[
-                                    <div
-                                        style={{ display: "flex", justifyContent: "space-between" }}
-                                    >
-                                        <AddToCartButton product={oneProduct} user={user} />
-                                        {user.category === "VENDOR" && (
-                                            <Button
-                                                type="primary"
-                                                onClick={editButtonClick(oneProduct)}
-                                            >
-                                                Edit
-                                            </Button>
-                                        )}
-                                        ,
-                                    </div>,
-                                ]}
-                                style={{ flex: 1, height: "100%" }}
-                                className={styles.card}
-                            >
-                                <Card.Meta
-                                    title={
-                                        <Typography.Paragraph>
-                                            Price: ${productId.price}{" "}
-                                        </Typography.Paragraph>
-                                    }
-                                    description={
-                                        <Typography.Paragraph
-                                            ellipsis={{
-                                                rows: 2,
-                                                expandable: true,
-                                                symbol: "more",
-                                            }}
-                                        >
-                                            Description:{productId.description}
-                                        </Typography.Paragraph>
-                                    }
-                                ></Card.Meta>
-                            </Card> */}
                         </Col>
                     </Row>
                 </div>
             ) : (
-                <p>Loading...</p>
+                <div className={styles.product_detail}>
+                    <Typography.Title level={2} className={styles.title}>
+                        Products Detail
+                    </Typography.Title>
+
+                    <div className={styles.mobile_container}>
+                        <Image
+                            className={styles.itemCardBadge}
+                            width={"308px"}
+                            height={"276px"}
+                            src={oneProduct.imageUrl}
+                            alt={oneProduct.name}
+                        />
+                        <div className={styles.mobile_texts}>
+                            <Typography.Text className={styles.product_category}>
+                                {oneProduct.category}
+                            </Typography.Text>
+                            <Typography.Title level={2} className={styles.product_name}>
+                                {oneProduct.name}
+                            </Typography.Title>
+                            <div className={styles.product_price_tag}>
+                                <Typography.Title level={3} className={styles.product_price}>
+                                    {`$${oneProduct.price}`}
+                                </Typography.Title>
+                                {oneProduct.stockNum === 0 ? (
+                                    <Tag icon={<CloseCircleOutlined />} color="error">
+                                        Out of Stock
+                                    </Tag>
+                                ) : (
+                                    <Tag icon={<CheckCircleOutlined />} color="success">
+                                        Adequate inventory
+                                    </Tag>
+                                )}
+                            </div>
+                            <Typography.Paragraph className={styles.product_description}>
+                                {oneProduct.description}
+                            </Typography.Paragraph>
+                            <div className={styles.buttons}>
+                                <AddToCartButton product={oneProduct} user={user} />
+                                {user.category === "VENDOR" && (
+                                    <Button
+                                        className={styles.edit_btn}
+                                        type="primary"
+                                        onClick={editButtonClick(oneProduct)}
+                                    >
+                                        Edit
+                                    </Button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             )}
         </>
     );
