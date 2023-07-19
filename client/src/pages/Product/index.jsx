@@ -1,31 +1,20 @@
-import {
-    Badge,
-    Button,
-    Card,
-    Image,
-    List,
-    message,
-    Typography,
-    Select,
-    Pagination,
-    InputNumber,
-    Row,
-    Col,
-} from "antd";
+import styles from "./style.module.css";
+
+import { Button, Card, Image, message, Typography, Select, Pagination, Row, Col } from "antd";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchProductsAction, fetchOneProductAction, deleteProductAction } from "app/productSlice";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { updateCartProduct, addCartProduct, getCart } from "app/userSlice";
-import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
-import AddToCartButton from "components/Product/AddToCart";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "hooks/useMediaQuery";
-import styles from "./style.module.css";
+
+import { fetchProductsAction, fetchOneProductAction } from "app/productSlice";
+import { getCart } from "app/userSlice";
+import AddToCartButton from "components/Product/AddToCart";
 
 function Products() {
     const isMobile = useMediaQuery("(max-width: 392px)");
+
     const dispatch = useDispatch();
-    const { products, status } = useSelector((state) => state.products);
+    const { products } = useSelector((state) => state.products);
     const { user } = useSelector((state) => state.user);
     const [sortOrder, setSortOrder] = useState("lowHigh");
     const navigate = useNavigate();
@@ -34,22 +23,45 @@ function Products() {
 
     let itemsPerPage = 8;
     let rowItemNumber = 4;
+
     if (isMobile) {
         itemsPerPage = 3;
         rowItemNumber = 1;
     }
+
+    useEffect(() => {
+        dispatch(fetchProductsAction(user));
+        dispatch(getCart(user));
+    }, []);
+
+    const getSortedItems = () => {
+        const sortedItems = [...products];
+        sortedItems.sort((a, b) => {
+            if (sortOrder === "lowHigh") {
+                return a.price > b.price ? 1 : a.price === b.price ? 0 : -1;
+            } else if (sortOrder === "highLow") {
+                return a.price < b.price ? 1 : a.price === b.price ? 0 : -1;
+            } else if (sortOrder === "lastAdded") {
+                return b.createdAt - a.createdAt;
+            }
+        });
+        return sortedItems;
+    };
+
     const renderItemsForCurrentPage = ({ itemsPerPage, rowItemNumber }) => {
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
         const sortedItems = getSortedItems();
+
         // Check if startIndex is within the range of the sortedItems array
         if (startIndex < sortedItems.length) {
             // Slice the sortedItems array to get the items for the current page
             let itemsForCurrentPage = 8;
             if (endIndex < sortedItems.length) {
+                // more product for next page
                 itemsForCurrentPage = sortedItems.slice(startIndex, endIndex);
             } else {
-                itemsForCurrentPage = sortedItems.slice(startIndex, sortedItems.length - 1);
+                itemsForCurrentPage = sortedItems.slice(startIndex, sortedItems.length);
             }
 
             const rows = [];
@@ -67,35 +79,39 @@ function Products() {
 
             return (
                 <div>
-                    {" "}
                     {rows.map((row, rowIndex) => (
                         <Row gutter={8} key={rowIndex}>
                             {row.map((product, productIndex) => (
-                                <Col key={productIndex} xs={24} sm={12} md={8} lg={6}>
+                                <Col
+                                    className={styles.col}
+                                    key={productIndex}
+                                    xs={24}
+                                    sm={12}
+                                    md={8}
+                                    lg={6}
+                                >
                                     <Card
                                         className={styles.itemCard}
                                         cover={
-                                            <Image
-                                                style={{
-                                                    maxWidth: "100%",
-                                                    maxHeight: "auto",
-                                                    padding: "6px",
-                                                }} // Adjusted inline styles
-                                                src={product.imageUrl}
-                                                alt={product.name}
-                                                onClick={imageHandleClick(product)} // Corrected onClick syntax
-                                            />
+                                            <div className={styles.image}>
+                                                <Image
+                                                    style={{
+                                                        width: "220px",
+                                                        height: "200px",
+                                                        padding: "6px",
+                                                    }} // Adjusted inline styles
+                                                    src={product.imageUrl}
+                                                    alt={product.name}
+                                                    onClick={imageHandleClick(product)} // Corrected onClick syntax
+                                                />
+                                            </div>
                                         }
                                         actions={[
-                                            <div
-                                                style={{
-                                                    display: "flex",
-                                                    justifyContent: "space-between",
-                                                }}
-                                            >
+                                            <div className={styles.buttons_container}>
                                                 <AddToCartButton product={product} user={user} />
                                                 {user.category === "VENDOR" && (
                                                     <Button
+                                                        className={styles.button}
                                                         type="primary"
                                                         onClick={editButtonClick(product)}
                                                     >
@@ -107,11 +123,15 @@ function Products() {
                                     >
                                         <Card.Meta
                                             title={
-                                                <Typography.Text>{product.name}</Typography.Text>
+                                                <Typography.Text className={styles.product_name}>
+                                                    {product.name}
+                                                </Typography.Text>
                                             }
                                             description={
                                                 <>
-                                                    <Typography.Text>
+                                                    <Typography.Text
+                                                        className={styles.product_price}
+                                                    >
                                                         ${product.price.toFixed(2)}
                                                     </Typography.Text>
                                                 </>
@@ -128,35 +148,18 @@ function Products() {
         return null;
     };
 
-    const getSortedItems = () => {
-        const sortedItems = [...products];
-        sortedItems.sort((a, b) => {
-            if (sortOrder === "lowHigh") {
-                return a.price > b.price ? 1 : a.price === b.price ? 0 : -1;
-            } else if (sortOrder === "highLow") {
-                return a.price < b.price ? 1 : a.price === b.price ? 0 : -1;
-            } else if (sortOrder === "lastAdded") {
-                return b.createdAt - a.createdAt;
-            }
-        });
-        return sortedItems;
-    };
-
-    useEffect(() => {
-        dispatch(fetchProductsAction(user));
-        dispatch(getCart(user));
-    }, []);
-
+    // navigate to next page
     const handlePaginationChange = (page) => {
         setCurrentPage(page);
         dispatch(getCart(user));
     };
 
+    // navigate to product detail
     const imageHandleClick = (product) => (e) => {
-        console.log(product);
         navigate(`/products/${product._id}`);
     };
 
+    // navigate to Edit-Product page
     const editButtonClick = (product) => (e) => {
         if ((user.category === "VENDOR") & (product.createdBy === user.id)) {
             dispatch(fetchOneProductAction(product._id)).then(() => {
@@ -168,6 +171,8 @@ function Products() {
             message.error(`Unauthorized`);
         }
     };
+
+    // Add product to user's cart
     const addProductButtonClick = (e) => {
         if (user.category === "VENDOR") {
             navigate(`/new-product`);
@@ -223,7 +228,6 @@ function Products() {
                     pageSize={itemsPerPage} // Number of items to display per page
                     onChange={handlePaginationChange}
                     showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} products`}
-                    defaultCurrent={1}
                 />
             </div>
         </div>

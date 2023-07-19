@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import ProductForm from "components/ProductForm";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createProductAction } from "app/productSlice";
 import { message } from "antd";
-import { removeError } from "app/errorSlice";
-import styles from "./style.module.css";
+
+import { createProductAction } from "app/productSlice";
+import ProductForm from "components/ProductForm";
+
 export default function NewProduct() {
     const { user } = useSelector((state) => state.user);
     const { status } = useSelector((state) => state.products);
@@ -14,7 +14,6 @@ export default function NewProduct() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    // Access the state data
     useEffect(() => {
         if (status === "successed" && submitted) {
             navigate("/");
@@ -22,15 +21,16 @@ export default function NewProduct() {
             message.error(`${error}`);
         }
     }, [submitted, status]);
+
     const onSubmit = (data) => {
         setSubmitted(true);
         const {
             productName: name,
             productDescription: description,
-            price: price,
-            category: category,
+            price,
+            category,
             inStockQuantity: stockNum,
-            ImageLink: imageUrl,
+            addImageLink: imageUrl,
         } = data;
         const product = {
             name,
@@ -45,11 +45,6 @@ export default function NewProduct() {
         dispatch(createProductAction({ id: user.id, product: product }));
     };
 
-    // redirect to product list page
-    // useEffect(() => {
-    //     console.log("submitted:", submitted);
-    //     if (submitted && !error) navigate("/");
-    // }, [error]);
     return (
         <ProductForm
             updateProduct={false}

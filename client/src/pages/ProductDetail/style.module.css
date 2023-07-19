@@ -10,6 +10,7 @@
 
 .title_box {
     display: flex;
+    justify-content: space-between;
     width: 100%;
 }
 
@@ -117,6 +118,12 @@
         padding: 0px;
         justify-content: center;
         align-items: center;
+    }
+
+    .title_box {
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
     }
 
     .title {

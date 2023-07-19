@@ -1,12 +1,13 @@
+import styles from "./style.module.css";
+
 import React, { useState, useEffect } from "react";
-import ProductForm from "components/ProductForm";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { Button, message } from "antd";
+
 import { deleteProductAction, updateProductAction, fetchOneProductAction } from "app/productSlice";
 import { removeError } from "app/errorSlice";
-import { useParams } from "react-router-dom";
-import { Button, message } from "antd";
-import styles from "./style.module.css";
+import ProductForm from "components/ProductForm";
 
 export default function EditProduct() {
     const { id, productId } = useParams();
@@ -18,19 +19,23 @@ export default function EditProduct() {
     const dispatch = useDispatch();
     const location = useLocation();
 
-    const deleteButtonClick = (e) => {
-        if ((user.category === "VENDOR") & (oneProduct.createdBy === id)) {
-            dispatch(deleteProductAction({ id: id, productId: productId })).then(() => {
-                message.success("the product is deleted successfully");
-                navigate(`/`);
-            });
-        } else {
-            message.error(`Unauthorized`);
-        }
-    };
+    useEffect(() => {
+        dispatch(removeError());
+    }, []);
+
     useEffect(() => {
         dispatch(fetchOneProductAction(productId));
     }, []);
+
+    useEffect(() => {
+        if (status === "successed" && submitted) {
+            console.log(location.state.from);
+            navigate(location.state.from);
+        } else if (status === "failed" && submitted) {
+            message.error(`${error}`);
+        }
+    }, [submitted, status]);
+
     const onSubmit = (data) => {
         setSubmitted(true);
         const {
@@ -51,36 +56,23 @@ export default function EditProduct() {
         dispatch(updateProductAction({ id, productId, product: product }));
     };
 
-    useEffect(() => {
-        dispatch(removeError());
-    }, []);
-
-    useEffect(() => {
-        if (status === "successed" && submitted) {
-            navigate("/user/${id}/edit-product/${productId}");
-        } else if (status === "failed" && submitted) {
-            message.error(`${error}`);
+    const deleteButtonClick = (e) => {
+        if ((user.category === "VENDOR") & (oneProduct.createdBy === id)) {
+            dispatch(deleteProductAction({ id: id, productId: productId })).then(() => {
+                message.success("the product is deleted successfully");
+                navigate(`/`);
+            });
+        } else {
+            message.error(`Unauthorized`);
         }
-    }, [submitted, status]);
-
-    // redirect to product list page
-    // useEffect(() => {
-    //     console.log("submitted:", submitted);
-    //     if (submitted && !error) navigate("/");
-    // }, [error]);
+    };
 
     return (
         <>
             {status === "pending" ? (
                 <div>Loading...</div>
             ) : status === "successed" ? (
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        flexDirection: "column",
-                    }}
-                >
+                <div className={styles.container}>
                     <ProductForm
                         updateProduct={true}
                         product={oneProduct}

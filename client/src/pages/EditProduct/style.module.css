@@ -1,4 +1,4 @@
-.itemCard,
+/* .itemCard,
 .itemCardBadge {
     margin: 8px;
 }
@@ -14,4 +14,10 @@
     background-color: #5048e5;
     columns: #ffffff;
     margin-top: 10px;
+} */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

@@ -15,12 +15,6 @@ export const fetchProducts = async ({ id }) => {
     });
 };
 
-// export const fetchProducts = async () => {
-//     return await apiCall({
-//         url: `/api/products`,
-//         method: 'GET',
-//     });
-// };
 export const fetchOneProduct = async (productId) => {
     return await apiCall({
         url: `/api/products/${productId}`,
