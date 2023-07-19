@@ -15,6 +15,7 @@ app.use(cors());
 // signin/signup/reset password
 app.use("/api/auth", authRouter);
 app.use("/api/users/:id", loginVerify, userVerify, userRouter);
+
 app.get("/api/products", loginVerify, userVerify, async function (req, res, next) {
     try {
         const Products = await db.Product.find().sort({ createdAt: "desc" }).populate("createdBy", {

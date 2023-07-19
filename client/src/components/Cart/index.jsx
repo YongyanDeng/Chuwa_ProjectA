@@ -6,6 +6,7 @@ import { Typography, Button, Form, Col, Row, Input, message } from "antd";
 
 import ProductCard from "./ProductCard";
 import { checkoutCart } from "app/userSlice";
+import { fetchProductsAction } from "app/productSlice";
 
 const { Title, Paragraph } = Typography;
 
@@ -13,6 +14,7 @@ export default function Cart() {
     const dispatch = useDispatch();
     const { user, cart, totalPrice, checkoutMessage } = useSelector((state) => state.user);
     const { message: error } = useSelector((state) => state.error);
+
     // local state
     const [subTotal, setSubTotal] = useState(totalPrice);
     const [discount, setDiscount] = useState(0);
@@ -40,7 +42,10 @@ export default function Cart() {
             }),
         ).then(() => {
             if (error) message.error(error);
-            else message.success("Thank you for your shopping!");
+            else {
+                dispatch(fetchProductsAction(user));
+                message.success("Thank you for your shopping!");
+            }
         });
     };
 

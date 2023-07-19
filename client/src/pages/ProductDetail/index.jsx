@@ -1,17 +1,11 @@
-import { useEffect, useState } from "react";
-import { Card, Col, Row, Space, Image, Typography, Button, message, InputNumber, Tag } from "antd";
-import {
-    MinusOutlined,
-    PlusOutlined,
-    CloseCircleOutlined,
-    CheckCircleOutlined,
-} from "@ant-design/icons";
-
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchOneProductAction } from "app/productSlice";
-import { useNavigate, useParams } from "react-router-dom";
-import { updateCartProduct, addCartProduct, getCart } from "app/userSlice";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { Col, Row, Image, Typography, Button, message, Tag } from "antd";
+import { CloseCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import { useMediaQuery } from "hooks/useMediaQuery";
+
+import { fetchOneProductAction } from "app/productSlice";
 
 import AddToCartButton from "components/Product/AddToCart";
 import styles from "./style.module.css";
@@ -20,23 +14,32 @@ function ProductDetail() {
     const isMobile = useMediaQuery("(max-width: 392px)");
 
     const dispatch = useDispatch();
-    const { oneProduct, status } = useSelector((state) => state.products);
+    const location = useLocation();
+    const { oneProduct, products } = useSelector((state) => state.products);
     const { user } = useSelector((state) => state.user);
     const { productId } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(fetchOneProductAction(productId));
-    }, [productId]);
+    }, [products]);
 
+    // navigate to Edit-Product page
     const editButtonClick = (product) => (e) => {
         if ((user.category === "VENDOR") & (product.createdBy === user.id)) {
             dispatch(fetchOneProductAction(product._id)).then(() => {
-                navigate(`/user/${user.id}/edit-product/${product._id}`);
+                // navigate(`/user/${user.id}/edit-product/${product._id}`);
+                navigate(`/user/${user.id}/edit-product/${product._id}`, {
+                    state: { from: location.pathname },
+                });
             });
         } else {
             message.error(`Unauthorized`);
         }
+    };
+
+    const handleCloseIconClick = () => {
+        navigate("/");
     };
 
     if (!oneProduct)
@@ -54,6 +57,10 @@ function ProductDetail() {
                         <Typography.Title level={2} className={styles.title}>
                             Products Detail
                         </Typography.Title>
+                        <CloseCircleOutlined
+                            style={{ fontSize: "30px" }}
+                            onClick={handleCloseIconClick}
+                        />
                     </div>
 
                     <Row className={styles.container} gutter={6} justify="center">
@@ -107,9 +114,15 @@ function ProductDetail() {
                 </div>
             ) : (
                 <div className={styles.product_detail}>
-                    <Typography.Title level={2} className={styles.title}>
-                        Products Detail
-                    </Typography.Title>
+                    <div className={styles.title_box}>
+                        <Typography.Title level={2} className={styles.title}>
+                            Products Detail
+                        </Typography.Title>
+                        <CloseCircleOutlined
+                            style={{ fontSize: "30px" }}
+                            onClick={handleCloseIconClick}
+                        />
+                    </div>
 
                     <div className={styles.mobile_container}>
                         <Image

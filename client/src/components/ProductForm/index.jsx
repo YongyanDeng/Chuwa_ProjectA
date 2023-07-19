@@ -1,30 +1,12 @@
-import {
-    Form,
-    Button,
-    Input,
-    InputNumber,
-    Select,
-    Upload,
-    Space,
-    Image,
-    Row,
-    Col,
-    Card,
-    Typography,
-    select,
-} from "antd";
-import React, { useEffect, useState } from "react";
 import style from "./styles.module.css";
+
+import { Form, Button, Input, InputNumber, Select, Row, Col, Card, Typography } from "antd";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useMediaQuery } from "hooks/useMediaQuery";
 
 const { TextArea } = Input;
-const normFile = (e) => {
-    if (Array.isArray(e)) {
-        return e;
-    }
-    return e?.fileList;
-};
+
 export default function ProductForm({ updateProduct, product, buttonText, onSubmit, title }) {
     const isMobile = useMediaQuery("(max-width: 392px)");
     const [imageUrl, setImageUrl] = useState("");
@@ -108,7 +90,7 @@ export default function ProductForm({ updateProduct, product, buttonText, onSubm
                                         },
                                     ]}
                                 >
-                                    <InputNumber className={style.inputbox} />
+                                    <InputNumber min={0.0} className={style.inputbox} />
                                 </Form.Item>
                             </>
                         ) : (
@@ -160,7 +142,7 @@ export default function ProductForm({ updateProduct, product, buttonText, onSubm
                                             },
                                         ]}
                                     >
-                                        <InputNumber />
+                                        <InputNumber min={0.0} />
                                     </Form.Item>
                                 </div>
                             </div>
@@ -177,7 +159,7 @@ export default function ProductForm({ updateProduct, product, buttonText, onSubm
                                         },
                                     ]}
                                 >
-                                    <InputNumber />
+                                    <InputNumber min={0.0} />
                                 </Form.Item>{" "}
                                 <Form.Item
                                     name="addImageLink"
@@ -227,7 +209,7 @@ export default function ProductForm({ updateProduct, product, buttonText, onSubm
                                                 },
                                             ]}
                                         >
-                                            <InputNumber />
+                                            <InputNumber min={0.0} />
                                         </Form.Item>
                                     </Col>
                                     <Col span={12}>

@@ -262,18 +262,6 @@ const updateProductQuantityInCart = async function (req, res, next) {
         if (user.cart.has(req.params.productId)) {
             const quantity = req.body.quantity;
 
-            // // Check this product in stock
-            // const product = await db.Product.findById(req.params.productId).populate("createdBy");
-            // if (!product) {
-            //     return res.status(401).json({ error: "Product does not exist anymore" });
-            // }
-
-            // // If quantity is larger than stock num, reject update
-            // if (!quantity || quantity > product.stockNum) {
-            //     return res.status(401).json({
-            //         error: "Insufficient stock of this product",
-            //     });
-            // }
             user.cart.set(req.params.productId, quantity);
 
             // save user

@@ -11,7 +11,7 @@ import CartTitle from "components/Cart/CartTitle";
 import { logOut, getCart } from "app/userSlice";
 
 const { Search } = Input;
-const { Title, Paragraph, Text } = Typography;
+const { Title, Text } = Typography;
 const title = "Management";
 const companyName = "Chuwa";
 
@@ -30,12 +30,14 @@ export default function Navbar() {
         setOpen(false);
     }, [location]);
 
-    // Btn click handlers
+    // Btns handlers
     const handleSearch = (value) => console.log(value);
+
     const handleSignBtnClick = (e) => {
         if (e.target.innerText === "Sign Out") dispatch(logOut());
         navigate("/signin");
     };
+
     const handleCartIconClick = () => {
         if (isAuthenticated) {
             setOpen(true);
@@ -44,6 +46,7 @@ export default function Navbar() {
             message.error("Please sign in first!");
         }
     };
+
     const closePopover = () => {
         setOpen(false);
     };
