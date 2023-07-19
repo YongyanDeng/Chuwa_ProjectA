@@ -16,7 +16,7 @@ export default function NewProduct() {
 
     // Access the state data
     useEffect(() => {
-        if (status !== "failed" && submitted) {
+        if (status === "successed" && submitted) {
             navigate("/");
         } else if (status === "failed" && submitted) {
             message.error(`${error}`);

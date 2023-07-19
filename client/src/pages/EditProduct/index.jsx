@@ -56,7 +56,7 @@ export default function EditProduct() {
     }, []);
 
     useEffect(() => {
-        if (status !== "failed" && submitted) {
+        if (status === "successed" && submitted) {
             navigate("/user/${id}/edit-product/${productId}");
         } else if (status === "failed" && submitted) {
             message.error(`${error}`);
@@ -73,7 +73,7 @@ export default function EditProduct() {
         <>
             {status === "pending" ? (
                 <div>Loading...</div>
-            ) : status !== "failed" ? (
+            ) : status === "successed" ? (
                 <div
                     style={{
                         display: "flex",
