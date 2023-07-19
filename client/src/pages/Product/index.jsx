@@ -177,37 +177,41 @@ function Products() {
     return (
         <div className={styles.productsContainer}>
             <div className={styles.topContent}>
-                <Typography.Title>Products </Typography.Title>
                 <div>
-                    <Select
-                        onChange={(value) => {
-                            setSortOrder(value);
-                        }}
-                        defaultValue={"Price Low to High"}
-                        options={[
-                            {
-                                label: "Price Low to High",
-                                value: "lowHigh",
-                            },
-                            {
-                                label: "Price High to Low",
-                                value: "highLow",
-                            },
-                            {
-                                label: "Last added",
-                                value: "lastAdded",
-                            },
-                        ]}
-                        style={{ margin: "10px" }}
-                    ></Select>
-                    {user.category === "VENDOR" ? (
-                        <Button type="primary" onClick={addProductButtonClick}>
-                            Add Product
-                        </Button>
-                    ) : (
-                        ""
-                    )}
+                    <Typography.Title>Products</Typography.Title>
                 </div>
+                <Row gutter={[16, 16]}>
+                    <div>
+                        <Select
+                            onChange={(value) => {
+                                setSortOrder(value);
+                            }}
+                            defaultValue={"Price Low to High"}
+                            options={[
+                                {
+                                    label: "Price Low to High",
+                                    value: "lowHigh",
+                                },
+                                {
+                                    label: "Price High to Low",
+                                    value: "highLow",
+                                },
+                                {
+                                    label: "Last added",
+                                    value: "lastAdded",
+                                },
+                            ]}
+                        ></Select>
+                    </div>
+                    <></>
+                    <div>
+                        {user.category === "VENDOR" && (
+                            <Button type="primary" onClick={addProductButtonClick}>
+                                Add Product
+                            </Button>
+                        )}
+                    </div>
+                </Row>
             </div>
             {renderItemsForCurrentPage({ itemsPerPage, rowItemNumber })}
 
