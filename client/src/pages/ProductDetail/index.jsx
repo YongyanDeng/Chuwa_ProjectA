@@ -29,6 +29,9 @@ function ProductDetail() {
     };
     return (
         <div className={styles.container}>
+            <div className={styles.topContent}>
+                <Typography.Title>Products Detail </Typography.Title>
+            </div>
             {oneProduct ? (
                 <div>
                     <Row gutter={6} justify="center">

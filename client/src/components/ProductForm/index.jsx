@@ -29,14 +29,6 @@ export default function ProductForm({ updateProduct, product, buttonText, onSubm
     const isMobile = useMediaQuery("(max-width: 392px)");
     const [imageUrl, setImageUrl] = useState("");
     const { status } = useSelector((state) => state.products);
-    // const { oneProduct, status } = useSelector((state) => state.products);
-    // const [initialValues, setInitialValues] = useState({
-    //     productName: "1",
-    //     productDescription: "1",
-    //     category: "1",
-    //     price: "1",
-    //     inStockQuantity: "1",
-    // });
 
     const formItemLayout = {
         labelCol: {
@@ -55,29 +47,6 @@ export default function ProductForm({ updateProduct, product, buttonText, onSubm
         price: product?.price,
         inStockQuantity: product?.stockNum,
     };
-
-    // useEffect(() => {
-    //     if (product)
-    //         setInitialValues({
-    //             productName: product.name,
-    //             productDescription: product.description,
-    //             category: product.category,
-    //             price: product.price,
-    //             inStockQuantity: product.stockNum,
-    //         });
-    // }, [product]);
-    // useEffect(() => {
-    //     if (product) {
-    //         setInitialValues({
-    //             productName: product.name,
-    //             productDescription: product.description,
-    //             category: product.category,
-    //             price: product.price,
-    //             inStockQuantity: product.stockNum,
-    //             imgaeLink: "",
-    //         });
-    //     }
-    // }, []);
 
     const handleImageLinkChange = (e) => {
         setImageUrl(e.target.value);
@@ -127,10 +96,22 @@ export default function ProductForm({ updateProduct, product, buttonText, onSubm
                                     labelCol={{ span: 32 }}
                                 >
                                     <Select>
-                                        <Select.Option value="demo">Demo</Select.Option>
+                                        <Select.Option value="category1">category1</Select.Option>
+                                        <Select.Option value="category2">category2</Select.Option>
+                                        <Select.Option value="category3">category3</Select.Option>
+                                        <Select.Option value="category4">category4</Select.Option>
                                     </Select>
                                 </Form.Item>
-                                <Form.Item name="price" label="Price">
+                                <Form.Item
+                                    name="price"
+                                    label="Price"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "Please enter a price",
+                                        },
+                                    ]}
+                                >
                                     <InputNumber className={style.inputbox} />
                                 </Form.Item>
                             </>
@@ -152,6 +133,12 @@ export default function ProductForm({ updateProduct, product, buttonText, onSubm
                                         label="Price"
                                         style={{ width: "500px" }}
                                         labelCol={{ span: 8 }}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: "Please enter a price",
+                                            },
+                                        ]}
                                     >
                                         <InputNumber />
                                     </Form.Item>
@@ -160,7 +147,16 @@ export default function ProductForm({ updateProduct, product, buttonText, onSubm
                         )}
                         {isMobile ? (
                             <>
-                                <Form.Item name="inStockQuantity" label="In Stock Quantity">
+                                <Form.Item
+                                    name="inStockQuantity"
+                                    label="In Stock Quantity"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "Please enter In Stock Quantity",
+                                        },
+                                    ]}
+                                >
                                     <InputNumber />
                                 </Form.Item>{" "}
                                 <Form.Item
@@ -199,6 +195,12 @@ export default function ProductForm({ updateProduct, product, buttonText, onSubm
                                             <Form.Item
                                                 name="inStockQuantity"
                                                 label="In Stock Quantity"
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: "Please enter In Stock Quantity",
+                                                    },
+                                                ]}
                                             >
                                                 <InputNumber />
                                             </Form.Item>
