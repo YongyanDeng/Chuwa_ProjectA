@@ -14,8 +14,8 @@ export default function MainLayout() {
     const headerStyle = useMemo(
         () => ({
             display: "flex",
-            // justifyContent: "space-between",
-            alignItems: !isMobile ? null : "flex-start",
+            justifyContent: "space-between",
+            alignItems: !isMobile ? null : "center",
             // width: "100%",
             width: !isMobile ? "100%" : "375px",
             height: !isMobile ? "48px" : "auto",
@@ -29,9 +29,8 @@ export default function MainLayout() {
     const footerStyle = useMemo(
         () => ({
             display: "flex",
-            // justifyContent: "space-between",
-            // alignItems: "center",
-            // width: "100%",
+            justifyContent: "space-between",
+            alignItems: "center",
             width: !isMobile ? "100%" : "375px",
             height: !isMobile ? "85px" : "auto",
             color: "#FFFFFF",
@@ -44,8 +43,9 @@ export default function MainLayout() {
     const contentStyle = useMemo(
         () => ({
             display: "flex",
-            height: !isMobile ? "calc(100vh - 48px - 85px)" : "auto",
+            height: !isMobile ? "calc(100vh - 48px - 85px)" : "900px",
             padding: "0 50px",
+            // width: "auto",
             width: !isMobile ? "100%" : "375px",
             justifyContent: "center",
             alignItems: "center",

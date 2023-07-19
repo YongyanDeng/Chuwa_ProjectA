@@ -26,3 +26,14 @@
     background: #fff;
     box-shadow: 0px 5px 16px 1px rgba(229, 229, 229, 0.8);
 }
+
+@media screen and (max-width: 375px) {
+    .FormBox {
+        display: flex;
+        flex-direction: column;
+        width: 344px;
+        align-items: center;
+        justify-content: flex-start;
+        /* padding:; */
+    }
+}

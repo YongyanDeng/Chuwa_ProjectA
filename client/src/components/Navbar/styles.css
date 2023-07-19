@@ -3,6 +3,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-direction: row;
 }
 
 .title {
@@ -57,16 +58,38 @@
 /* small screen responsive design */
 @media screen and (max-width: 375px) {
     .navbar {
-        flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .title {
+        order: -1;
     }
 
     .searchBox {
-        flex-basis: 100%;
-        margin-top: 10px;
+        order: 0;
+        width: 100%;
+    }
+
+    .right-menu {
+        order: -1;
+        justify-content: flex-start;
     }
 
     .menu {
         flex-basis: 100%;
         margin-top: 10px;
     }
+
+    /* .menu Button {
+        margin-left: 0;
+        margin-right: 10px;
+    }
+
+    .menu .ant-typography {
+        margin-left: 0;
+        margin-right: 10px;
+        size: auto;
+    } */
 }
