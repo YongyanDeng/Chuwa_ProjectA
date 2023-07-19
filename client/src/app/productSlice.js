@@ -95,7 +95,7 @@ const productSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchProductsAction.fulfilled, (state, action) => {
-            state.status = "succeeded";
+            state.status = "successed";
             state.products = action.payload;
         });
         builder.addCase(fetchProductsAction.rejected, (state, action) => {
@@ -105,7 +105,7 @@ const productSlice = createSlice({
             state.status = "pending";
         });
         builder.addCase(fetchOneProductAction.fulfilled, (state, action) => {
-            state.status = "succeeded";
+            state.status = "successed";
             state.oneProduct = action.payload;
         });
         builder.addCase(fetchOneProductAction.rejected, (state, action) => {
@@ -115,7 +115,7 @@ const productSlice = createSlice({
             state.status = "pending";
         });
         builder.addCase(createProductAction.fulfilled, (state, action) => {
-            state.status = "succeeded";
+            state.status = "successed";
             state.products.push(action.payload);
         });
         builder.addCase(createProductAction.rejected, (state, action) => {
@@ -125,7 +125,7 @@ const productSlice = createSlice({
             state.status = "pending";
         });
         builder.addCase(deleteProductAction.fulfilled, (state, action) => {
-            state.status = "succeeded";
+            state.status = "successed";
             state.products = state.products.filter((product) => product._id !== action.payload._id);
         });
         builder.addCase(deleteProductAction.rejected, (state, action) => {
@@ -135,7 +135,7 @@ const productSlice = createSlice({
             state.status = "pending";
         });
         builder.addCase(updateProductAction.fulfilled, (state, action) => {
-            state.status = "succeeded";
+            state.status = "successed";
             const productIndex = state.products.findIndex(
                 (product) => product._id === action.payload._id,
             );
