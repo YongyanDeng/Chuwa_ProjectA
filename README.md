@@ -13,3 +13,8 @@ Chuwa Fullstack Training - Project A
 5. Json Web Token: `npm i jsonwebtoken`
 6. Bcrypt: `npm i bcrypt`
 7. Nodemon: `npm i nodemon`
+
+## Demo Accounts
+
+1. account: demo@vendor.com password: 123
+2. account: demo@user.com password: 123
