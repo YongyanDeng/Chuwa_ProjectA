@@ -11,7 +11,7 @@ export default function Footbar() {
 
     return (
         <footer className="footbar">
-            <p>{RIGHTS}</p>
+            <p className="copyrights">{RIGHTS}</p>
             <div className="icons">
                 <button
                     onClick={handleIconClick}
