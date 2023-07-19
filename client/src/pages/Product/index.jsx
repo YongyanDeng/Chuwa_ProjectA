@@ -19,9 +19,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { updateCartProduct, addCartProduct, getCart } from "app/userSlice";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import AddToCartButton from "components/Product/AddToCart";
+import { useMediaQuery } from "hooks/useMediaQuery";
 import styles from "./style.module.css";
 
 function Products() {
+    const isMobile = useMediaQuery("(max-width: 392px)");
     const dispatch = useDispatch();
     const { products, status } = useSelector((state) => state.products);
     const { user } = useSelector((state) => state.user);
@@ -49,9 +51,15 @@ function Products() {
     };
     const handlePaginationChange = (page) => {
         setCurrentPage(page);
+        dispatch(getCart(user));
     };
-    const renderItemsForCurrentPage = () => {
-        const itemsPerPage = 8;
+    let itemsPerPage = 8;
+    let rowItemNumber = 4;
+    if (isMobile) {
+        itemsPerPage = 3;
+        rowItemNumber = 1;
+    }
+    const renderItemsForCurrentPage = ({ itemsPerPage, rowItemNumber }) => {
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
         const sortedItems = getSortedItems();
@@ -67,9 +75,9 @@ function Products() {
 
             const rows = [];
             let index = startIndex + 1;
-            for (let i = 0; i < itemsForCurrentPage.length; i += 4) {
+            for (let i = 0; i < itemsForCurrentPage.length; i += rowItemNumber) {
                 const rowItems = itemsForCurrentPage
-                    .slice(i, i + 4)
+                    .slice(i, i + rowItemNumber)
                     .map((product, productIndex) => ({
                         ...product,
                         index: index++,
@@ -84,16 +92,17 @@ function Products() {
                     {rows.map((row, rowIndex) => (
                         <Row gutter={8} key={rowIndex}>
                             {row.map((product, productIndex) => (
-                                <Col key={productIndex} span={6}>
+                                <Col key={productIndex} xs={24} sm={12} md={8} lg={6}>
                                     <Card
                                         className={styles.itemCard}
                                         title={product.name}
                                         cover={
                                             <Image
+                                                style={{ maxWidth: "100%", maxHeight: "auto" }} // Adjusted inline styles
                                                 className={styles.itemCardBadge}
                                                 src={product.imageUrl}
                                                 alt={product.name}
-                                                onClick={imageHandleClick(product)}
+                                                onClick={imageHandleClick(product)} // Corrected onClick syntax
                                             />
                                         }
                                         actions={[
@@ -200,12 +209,12 @@ function Products() {
                     )}
                 </div>
             </div>
-            {renderItemsForCurrentPage()}
+            {renderItemsForCurrentPage({ itemsPerPage, rowItemNumber })}
 
             <Pagination
                 current={currentPage}
                 total={products.length}
-                pageSize={8} // Number of items to display per page
+                pageSize={itemsPerPage} // Number of items to display per page
                 onChange={handlePaginationChange}
                 style={{ paddingBottom: "20px" }}
             />
