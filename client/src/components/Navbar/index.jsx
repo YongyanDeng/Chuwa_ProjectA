@@ -3,7 +3,7 @@ import "./styles.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
-import { Input, Typography, Button, Popover, Space, Menu } from "antd";
+import { Input, Typography, Button, Popover, Space, message } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 
 import Cart from "components/Cart";
@@ -37,8 +37,12 @@ export default function Navbar() {
         navigate("/signin");
     };
     const handleCartIconClick = () => {
-        setOpen(true);
-        dispatch(getCart(user));
+        if (isAuthenticated) {
+            setOpen(true);
+            dispatch(getCart(user));
+        } else {
+            message.error("Please sign in first!");
+        }
     };
     const closePopover = () => {
         setOpen(false);

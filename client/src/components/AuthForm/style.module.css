@@ -27,13 +27,33 @@
     box-shadow: 0px 5px 16px 1px rgba(229, 229, 229, 0.8);
 }
 
-@media screen and (max-width: 375px) {
+.buttomText {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+@media screen and (max-width: 392px) {
     .FormBox {
         display: flex;
         flex-direction: column;
         width: 344px;
         align-items: center;
         justify-content: flex-start;
-        /* padding:; */
+        margin: 100px 0px 100px 0px;
+    }
+
+    .title {
+        text-align: center;
+        font-size: 20px !important;
+        font-style: small;
+        font-weight: 700 !important;
+        line-height: 137.5% !important;
+    }
+
+    .buttomText {
+        display: flex;
+        flex-direction: column;
     }
 }

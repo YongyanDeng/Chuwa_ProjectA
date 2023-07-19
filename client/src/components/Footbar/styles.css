@@ -11,7 +11,7 @@
 }
 
 /* small screen responsive design */
-@media screen and (max-width: 375px) {
+@media screen and (max-width: 392px) {
     .footbar {
         display: flex;
         flex-direction: column;
