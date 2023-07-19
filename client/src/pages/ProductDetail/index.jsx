@@ -9,7 +9,7 @@ import {
 
 import { useSelector, useDispatch } from "react-redux";
 import { fetchOneProductAction } from "app/productSlice";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { updateCartProduct, addCartProduct, getCart } from "app/userSlice";
 import { useMediaQuery } from "hooks/useMediaQuery";
 
@@ -24,6 +24,7 @@ function ProductDetail() {
     const { user } = useSelector((state) => state.user);
     const { productId } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         dispatch(fetchOneProductAction(productId));
@@ -32,7 +33,9 @@ function ProductDetail() {
     const editButtonClick = (product) => (e) => {
         if ((user.category === "VENDOR") & (product.createdBy === user.id)) {
             dispatch(fetchOneProductAction(product._id)).then(() => {
-                navigate(`/user/${user.id}/edit-product/${product._id}`);
+                navigate(`/user/${user.id}/edit-product/${product._id}`, {
+                    state: { from: location.pathname },
+                });
             });
         } else {
             message.error(`Unauthorized`);

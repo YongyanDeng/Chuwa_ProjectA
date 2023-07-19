@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProductForm from "components/ProductForm";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { createProductAction } from "app/productSlice";
 import { message } from "antd";
 import { removeError } from "app/errorSlice";
@@ -13,9 +13,13 @@ export default function NewProduct() {
     const [submitted, setSubmitted] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const location = useLocation();
+
+    // Access the state data
     useEffect(() => {
-        if (status === "successed" && submitted) {
-            navigate("/");
+        if (status !== "failed" && submitted) {
+            navigate(location.state?.from);
         } else if (status === "failed" && submitted) {
             message.error(`${error}`);
         }

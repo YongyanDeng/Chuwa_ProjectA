@@ -30,16 +30,6 @@ export default function ProductForm({ updateProduct, product, buttonText, onSubm
     const [imageUrl, setImageUrl] = useState("");
     const { status } = useSelector((state) => state.products);
 
-    const formItemLayout = {
-        labelCol: {
-            xs: { span: 24 },
-            sm: { span: 8 },
-        },
-        wrapperCol: {
-            xs: { span: 24 },
-            sm: { span: 16 },
-        },
-    };
     const initialValues = {
         productName: product?.name,
         productDescription: product?.description,
@@ -78,7 +68,7 @@ export default function ProductForm({ updateProduct, product, buttonText, onSubm
                             label="Product name"
                             rules={[{ required: true, message: "Please enter new product name" }]}
                             style={{
-                                width: isMobile ? "300px" : "500px",
+                                width: isMobile ? "300px" : "100%",
                                 textAlign: "center",
                             }}
                         >
@@ -94,6 +84,12 @@ export default function ProductForm({ updateProduct, product, buttonText, onSubm
                                     label="Category"
                                     // style={{ width: "100%" }}
                                     labelCol={{ span: 32 }}
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "Please select a category",
+                                        },
+                                    ]}
                                 >
                                     <Select>
                                         <Select.Option value="category1">category1</Select.Option>
@@ -116,22 +112,46 @@ export default function ProductForm({ updateProduct, product, buttonText, onSubm
                                 </Form.Item>
                             </>
                         ) : (
-                            <>
-                                <Space size="large">
+                            <div>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        alignItems: "space-between",
+                                    }}
+                                >
                                     <Form.Item
                                         name="category"
                                         label="Category"
-                                        style={{ width: "400px" }}
+                                        // style={{ width: "100%" }}
                                         labelCol={{ span: 32 }}
+                                        style={{ width: "300px" }}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: "Please select a category",
+                                            },
+                                        ]}
                                     >
                                         <Select>
-                                            <Select.Option value="demo">Demo</Select.Option>
+                                            <Select.Option value="category1">
+                                                category1
+                                            </Select.Option>
+                                            <Select.Option value="category2">
+                                                category2
+                                            </Select.Option>
+                                            <Select.Option value="category3">
+                                                category3
+                                            </Select.Option>
+                                            <Select.Option value="category4">
+                                                category4
+                                            </Select.Option>
                                         </Select>
                                     </Form.Item>
                                     <Form.Item
                                         name="price"
                                         label="Price"
-                                        style={{ width: "500px" }}
+                                        style={{ width: "500px", marginLeft: "16px" }}
                                         labelCol={{ span: 8 }}
                                         rules={[
                                             {
@@ -142,8 +162,8 @@ export default function ProductForm({ updateProduct, product, buttonText, onSubm
                                     >
                                         <InputNumber />
                                     </Form.Item>
-                                </Space>
-                            </>
+                                </div>
+                            </div>
                         )}
                         {isMobile ? (
                             <>
@@ -187,55 +207,59 @@ export default function ProductForm({ updateProduct, product, buttonText, onSubm
                                 </Form.Item>
                             </>
                         ) : (
-                            <>
-                                <Form.Item>
-                                    <Row gutter={16}>
-                                        {/* Adjust the gutter value as needed */}
-                                        <Col span={12}>
-                                            <Form.Item
-                                                name="inStockQuantity"
-                                                label="In Stock Quantity"
-                                                rules={[
-                                                    {
-                                                        required: true,
-                                                        message: "Please enter In Stock Quantity",
-                                                    },
-                                                ]}
-                                            >
-                                                <InputNumber />
-                                            </Form.Item>
-                                        </Col>
-                                        <Col span={12}>
-                                            <Form.Item
-                                                name="addImageLink"
-                                                label="Add Image Link"
-                                                style={{ width: isMobile ? "300px" : "500px" }}
-                                                rules={[
-                                                    {
-                                                        url: true,
-                                                        message: "Invalid url Input",
-                                                    },
-                                                ]}
-                                            >
-                                                <Row gutter={1}>
-                                                    {/* Adjust the gutter value as needed */}
-                                                    <Col span={12}>
-                                                        <Input
-                                                            id="image-link-input"
-                                                            defaultValue="https://"
-                                                            placeholder="Enter link"
-                                                            onChange={handleImageLinkChange}
-                                                        />
-                                                    </Col>
-                                                    <Col span={12}>
-                                                        <Button type="primary">Upload</Button>
-                                                    </Col>
-                                                </Row>
-                                            </Form.Item>
-                                        </Col>
-                                    </Row>
-                                </Form.Item>
-                            </>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "space-between",
+                                }}
+                            >
+                                <Row gutter={16}>
+                                    {/* Adjust the gutter value as needed */}
+                                    <Col span={12}>
+                                        <Form.Item
+                                            name="inStockQuantity"
+                                            label="In Stock Quantity"
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: "Please enter In Stock Quantity",
+                                                },
+                                            ]}
+                                        >
+                                            <InputNumber />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={12}>
+                                        <Form.Item
+                                            name="addImageLink"
+                                            label="Add Image Link"
+                                            style={{ width: isMobile ? "300px" : "300px" }}
+                                            rules={[
+                                                {
+                                                    url: true,
+                                                    message: "Invalid url Input",
+                                                },
+                                            ]}
+                                        >
+                                            <Row gutter={1}>
+                                                {/* Adjust the gutter value as needed */}
+                                                <Col span={12}>
+                                                    <Input
+                                                        id="image-link-input"
+                                                        defaultValue="https://"
+                                                        placeholder="Enter link"
+                                                        onChange={handleImageLinkChange}
+                                                    />
+                                                </Col>
+                                                <Col span={12}>
+                                                    <Button type="primary">Upload</Button>
+                                                </Col>
+                                            </Row>
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                            </div>
                         )}
                         <Form.Item>
                             {imageUrl && imageUrl !== "https://" ? (
