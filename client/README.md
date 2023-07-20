@@ -2,6 +2,14 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Dependencies
+
+1. Ant Design: `npm install antd`
+2. Json Web Token: `npm install jwt-decode`
+3. React Router: `npm install react-router-dom`
+4. React Redux: `npm install react-redux`
+5. React Toolkit: `npm install @reduxjs/toolkit`
+
 ## Available Scripts
 
 In the project directory, you can run:

@@ -8,5 +8,7 @@ pre_draw/
 books/
 .idea/
 .env
+.prettierrc.js
+.vscode
 
 marp-diagrams/
