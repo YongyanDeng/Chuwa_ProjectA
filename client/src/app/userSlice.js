@@ -254,10 +254,11 @@ const currentUserSlice = createSlice({
         builder.addCase(checkoutCart.pending, (state, action) => {
             state.status = "pending";
         });
+
         // add product to user's cart, return the current cart
         builder.addCase(addCartProduct.fulfilled, (state, action) => {
-            const cart = action.payload;
-            state.cart.push(cart);
+            // const cart = action.payload;
+            // state.cart.push(cart);
             state.status = "successed";
         });
         builder.addCase(addCartProduct.rejected, (state, action) => {
