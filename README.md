@@ -1,6 +1,4 @@
-# Chuwa_ProjectA
-
-Chuwa Fullstack Training - Project A
+# E-commerce Demo A
 
 ---
 
